@@ -1257,80 +1257,101 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 </div>
 
 <div id="screen-results" class="screen">
-  <div class="result-hero">
-    <div class="result-hero-label">⚡ Valor Sugerido</div>
-    <div class="result-hero-value" id="displayPrecoFinal">R$ 0,00</div>
-    <div class="result-mini-grid">
-      <div class="result-mini">
-        <div class="result-mini-label">Lucro Líquido</div>
-        <div class="result-mini-val green" id="displayLucroLiquido">R$ 0,00</div>
-      </div>
-      <div class="result-mini">
-        <div class="result-mini-label">Despesas</div>
-        <div class="result-mini-val red" id="displayDespesas">R$ 0,00</div>
+
+  <!-- Card hero: total + lucro/despesas com logo de fundo -->
+  <div style="position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:10px;overflow:hidden">
+    <div id="res-logo-bg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0"></div>
+    <div style="position:relative;z-index:1">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--c-srv);margin-bottom:4px">⚡ Valor Total</div>
+      <div id="displayPrecoFinal" style="font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--c-srv);line-height:1;margin-bottom:14px">R$ 0,00</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:rgba(34,197,94,.08);border:0.5px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 12px">
+          <div style="font-size:10px;font-weight:700;color:var(--c-mat);margin-bottom:3px">Lucro Líquido</div>
+          <div id="displayLucroLiquido" style="font-size:16px;font-weight:800;color:var(--c-mat)">R$ 0,00</div>
+        </div>
+        <div style="background:rgba(239,68,68,.08);border:0.5px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 12px">
+          <div style="font-size:10px;font-weight:700;color:#f87171;margin-bottom:3px">Despesas</div>
+          <div id="displayDespesas" style="font-size:16px;font-weight:800;color:#f87171">R$ 0,00</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="result-stats-row">
-    <div class="stat-card"><div class="stat-card-icon">🚗</div><div class="stat-card-label">Logística</div><div class="stat-card-val" id="displayLogistica">R$ 0</div></div>
-    <div class="stat-card"><div class="stat-card-icon">🔧</div><div class="stat-card-label">Mão de Obra</div><div class="stat-card-val" id="displayMaoObra">R$ 0</div></div>
-    <div class="stat-card"><div class="stat-card-icon">📦</div><div class="stat-card-label">Materiais</div><div class="stat-card-val" id="displayMateriais">R$ 0</div></div>
+
+  <!-- Card breakdown -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px 16px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <span style="font-size:12px;color:var(--txt2)">🚗 Logística</span>
+      <span id="displayLogistica" style="font-size:12px;font-weight:700;color:var(--txt3)">R$ 0,00</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <span style="font-size:12px;color:var(--txt2)">🔧 Mão de obra</span>
+      <span id="displayMaoObra" style="font-size:12px;font-weight:700;color:var(--txt)">R$ 0,00</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <span style="font-size:12px;color:var(--txt2)">📦 Materiais</span>
+      <span id="displayMateriais" style="font-size:12px;font-weight:700;color:var(--txt)">R$ 0,00</span>
+    </div>
+    <div id="displayDescontoRow" style="display:none;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <span style="font-size:12px;color:#4ade80">🏷️ Desconto</span>
+      <span id="displayDesconto" style="font-size:12px;font-weight:700;color:#4ade80"></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;cursor:pointer" onclick="toggleMatCliente()">
+      <span style="font-size:12px;color:var(--txt2)">📦 Cliente fornece material?</span>
+      <div id="mat-cliente-toggle" class="toggle-switch"><div class="toggle-thumb"></div></div>
+    </div>
   </div>
-  <div id="displayDescontoRow" style="display:none;align-items:center;justify-content:space-between;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:10px 16px;margin-bottom:12px">
-    <span style="font-size:12px;font-weight:700;color:#16a34a">🏷️ Desconto aplicado</span>
-    <span id="displayDesconto" style="font-family:var(--font-display);font-size:14px;font-weight:800;color:#16a34a"></span>
-  </div>
-  <div style="display:flex;gap:8px;margin-bottom:12px">
-    <button id="btnPDF" class="btn btn-secondary" onclick="sharePDF()">
-      <span id="labelPDF" style="display:flex;align-items:center;gap:6px">↗ ENVIAR PDF</span>
+
+  <!-- Botões -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+    <button id="btnPDF" onclick="sharePDF()" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:#f97316;border:none;border-radius:12px;color:#fff;cursor:pointer;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:4px">
+      <span id="labelPDF">↗ PDF</span>
       <div id="loaderPDF" class="loader" style="display:none"></div>
     </button>
-    <button class="btn btn-secondary" onclick="resetForm()">↺ NOVO CÁLCULO</button>
+    <button onclick="showScreen('screen-input')" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:#2563eb;border:none;border-radius:12px;color:#fff;cursor:pointer;letter-spacing:.04em">✏️ Editar</button>
+    <button onclick="resetForm()" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--txt2);cursor:pointer;letter-spacing:.04em">↺ Novo</button>
   </div>
-  <div id="toggle-mat-cliente" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px;cursor:pointer" onclick="toggleMatCliente()">
-    <div>
-      <div style="font-size:13px;font-weight:700;color:var(--txt)">📦 Cliente fornece o material?</div>
-      <div id="mat-cliente-sub" style="font-size:11px;color:var(--txt3);margin-top:2px">PDF inclui valor dos materiais</div>
+
+  <!-- Mensagens prontas -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--txt3);padding:10px 14px;border-bottom:1px solid var(--border)">Mensagens Prontas</div>
+    <div class="accordion" id="acc1" style="border-radius:0;border:none;margin:0">
+      <button class="accordion-trigger" onclick="toggleAccordion('acc1')" style="border-radius:0">
+        <span class="accordion-trigger-label"><span class="accordion-num num-blue">1</span> Proposta</span>
+        <span class="accordion-chevron">▾</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-inner">
+          <div class="msg-box selectable" id="txt_proposta"></div>
+          <button class="btn btn-accent" onclick="copyText('txt_proposta',this)">📋 COPIAR TEXTO</button>
+        </div>
+      </div>
     </div>
-    <div id="mat-cliente-toggle" class="toggle-switch"><div class="toggle-thumb"></div></div>
-  </div>
-  <div class="section-divider">Mensagens Prontas</div>
-  <div class="accordion" id="acc1">
-    <button class="accordion-trigger" onclick="toggleAccordion('acc1')">
-      <span class="accordion-trigger-label"><span class="accordion-num num-blue">1</span> Proposta</span>
-      <span class="accordion-chevron">▾</span>
-    </button>
-    <div class="accordion-body">
-      <div class="accordion-inner">
-        <div class="msg-box selectable" id="txt_proposta"></div>
-        <button class="btn btn-accent" onclick="copyText('txt_proposta',this)">📋 COPIAR TEXTO</button>
+    <div class="accordion" id="acc2" style="border-radius:0;border:none;border-top:1px solid var(--border);margin:0">
+      <button class="accordion-trigger" onclick="toggleAccordion('acc2')" style="border-radius:0">
+        <span class="accordion-trigger-label"><span class="accordion-num num-orange">2</span> Cobrança de Sinal</span>
+        <span class="accordion-chevron">▾</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-inner">
+          <div class="msg-box selectable" id="txt_sinal"></div>
+          <button class="btn btn-secondary" style="width:100%;background:#f97316;color:#fff;border:none" onclick="copyText('txt_sinal',this)">📋 COPIAR TEXTO</button>
+        </div>
+      </div>
+    </div>
+    <div class="accordion" id="acc3" style="border-radius:0;border:none;border-top:1px solid var(--border);margin:0">
+      <button class="accordion-trigger" onclick="toggleAccordion('acc3')" style="border-radius:0">
+        <span class="accordion-trigger-label"><span class="accordion-num num-green">3</span> Conclusão do Serviço</span>
+        <span class="accordion-chevron">▾</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-inner">
+          <div class="msg-box selectable" id="txt_final"></div>
+          <button class="btn btn-secondary" style="width:100%;background:#22c55e;color:#fff;border:none" onclick="copyText('txt_final',this)">📋 COPIAR TEXTO</button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="accordion" id="acc2">
-    <button class="accordion-trigger" onclick="toggleAccordion('acc2')">
-      <span class="accordion-trigger-label"><span class="accordion-num num-orange">2</span> Cobrança de Sinal</span>
-      <span class="accordion-chevron">▾</span>
-    </button>
-    <div class="accordion-body">
-      <div class="accordion-inner">
-        <div class="msg-box selectable" id="txt_sinal"></div>
-        <button class="btn btn-secondary" style="width:100%;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none" onclick="copyText('txt_sinal',this)">📋 COPIAR TEXTO</button>
-      </div>
-    </div>
-  </div>
-  <div class="accordion" id="acc3">
-    <button class="accordion-trigger" onclick="toggleAccordion('acc3')">
-      <span class="accordion-trigger-label"><span class="accordion-num num-green">3</span> Conclusão do Serviço</span>
-      <span class="accordion-chevron">▾</span>
-    </button>
-    <div class="accordion-body">
-      <div class="accordion-inner">
-        <div class="msg-box selectable" id="txt_final"></div>
-        <button class="btn btn-secondary" style="width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none" onclick="copyText('txt_final',this)">📋 COPIAR TEXTO</button>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 <div id="screen-agenda" class="screen">
@@ -3026,29 +3047,43 @@ function addService(e, s, srvId) {
   document.getElementById('srv-empty').style.display = 'none';
   const row = document.createElement('div');
   row.className = 'srv-row';
+  row.style.cssText = 'flex-direction:column;align-items:stretch;gap:0;padding:9px 12px 0;';
   if (srvId) row.dataset.srvId = srvId;
-  const nm = document.createElement('span'); nm.className = 'srv-name'; nm.textContent = (s.icon ? s.icon + ' ' : '') + s.n;
+
+  // Separar nome base das opções (separadas por " · ")
+  const fullName = (s.icon ? s.icon + ' ' : '') + s.n;
+  const dotIdx = s.n.indexOf(' · ');
+  const nomeBase = dotIdx > -1 ? (s.icon ? s.icon + ' ' : '') + s.n.slice(0, dotIdx) : fullName;
+  const opcoes = dotIdx > -1 ? s.n.slice(dotIdx + 3).split(' · ').filter(Boolean) : [];
+
+  // Linha 1: nome + botões ⚙ ×
+  const linha1 = document.createElement('div');
+  linha1.style.cssText = 'display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px;';
+
+  const nm = document.createElement('span'); nm.className = 'srv-name';
+  nm.textContent = nomeBase;
   nm.title = 'Toque para editar o nome';
+  nm.style.cssText = 'flex:1;font-size:13px;font-weight:700;color:var(--c-srv);line-height:1.4;word-break:break-word;';
   nm.addEventListener('click', function() { editInlineName(nm, 'srv-name'); });
-  const pw = document.createElement('div'); pw.className = 'price-wrap';
-  const pp = document.createElement('span'); pp.className = 'price-prefix'; pp.textContent = 'R$';
-  const pi = document.createElement('input'); pi.className = 'price-input';
-  const pv = typeof s.v === 'number' ? s.v.toFixed(0) + ',00' : s.v;
-  pi.value = pv;
-  pi.addEventListener('input', function() { formatPriceInput(this); updateFloatingButton(); });
-  pw.appendChild(pp); pw.appendChild(pi);
-  const qw = document.createElement('div'); qw.className = 'qty-wrap';
-  const qm = document.createElement('button'); qm.className = 'qty-btn'; qm.textContent = '−';
-  qm.addEventListener('click', function() { changeQty(this, -1); updateFloatingButton(); propagateQtyToMaterials(row); });
-  const qi = document.createElement('input');
-  qi.className = 'qty-val'; qi.type = 'number'; qi.value = '1'; qi.min = '1';
-  qi.addEventListener('input', function() { updateFloatingButton(); propagateQtyToMaterials(row); });
-  const qp = document.createElement('button'); qp.className = 'qty-btn'; qp.textContent = '+';
-  qp.addEventListener('click', function() { changeQty(this, 1); updateFloatingButton(); propagateQtyToMaterials(row); });
-  qw.appendChild(qm); qw.appendChild(qi); qw.appendChild(qp);
+
+  const actWrap = document.createElement('div');
+  actWrap.style.cssText = 'display:flex;align-items:center;gap:4px;flex-shrink:0;margin-top:1px;';
+
+  const btnCfg = document.createElement('button');
+  btnCfg.className = 'btn-recfg';
+  btnCfg.textContent = '⚙';
+  btnCfg.title = 'Reconfigurar serviço';
+  btnCfg.addEventListener('click', function() {
+    const nomeTxt = row.querySelector('.srv-name')?.textContent || s.n;
+    const preco = parseCurrency(row.querySelector('.price-input')?.value || '0');
+    const srvDataRecfg = { n: nomeTxt.replace(/^[^\s]+\s/, ''), v: preco, icon: s.icon || '' };
+    abrirConfigurador(srvDataRecfg);
+    if (scpAtivo) scpAtivo._rowToReplace = row;
+  });
+
   const del = document.createElement('button'); del.className = 'delete-btn'; del.textContent = '×';
+  del.style.cssText = 'font-size:15px;';
   del.addEventListener('click', function() {
-    // Remover materiais vinculados junto
     if (row.dataset.srvId) {
       document.querySelectorAll(`#mat-container .mat-row[data-linked-srv="${row.dataset.srvId}"]`).forEach(mr => mr.remove());
       if (!document.querySelector('#mat-container .mat-row'))
@@ -3061,32 +3096,56 @@ function addService(e, s, srvId) {
     updateServiceBadge(); updateFloatingButton();
   });
 
-  // Botão ⚙ reconfigurar
-  const btnCfg = document.createElement('button');
-  btnCfg.className = 'btn-recfg';
-  btnCfg.textContent = '⚙';
-  btnCfg.title = 'Reconfigurar serviço';
-  btnCfg.addEventListener('click', function() {
-    const nome = row.querySelector('.srv-name')?.textContent || s.n;
-    const preco = parseCurrency(row.querySelector('.price-input')?.value || '0');
-    const srvDataRecfg = { n: nome.replace(/^[^\s]+\s/, ''), v: preco, icon: s.icon || '' };
-    // Guarda referência da row para remover depois de reconfigurar
-    const _rowRef = row;
-    abrirConfigurador(srvDataRecfg);
-    // Após configurador abrir, ao confirmar, remove esta row
-    if (scpAtivo) scpAtivo._rowToReplace = _rowRef;
-  });
+  actWrap.appendChild(btnCfg); actWrap.appendChild(del);
+  linha1.appendChild(nm); linha1.appendChild(actWrap);
 
-  const actWrap = document.createElement('div');
-  actWrap.style.cssText = 'display:flex;align-items:center;gap:4px;flex-shrink:0;';
-  actWrap.appendChild(btnCfg);
-  actWrap.appendChild(del);
+  // Linha 2: pills de opções (só se houver)
+  let pillsRow = null;
+  if (opcoes.length) {
+    pillsRow = document.createElement('div');
+    pillsRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;';
+    opcoes.forEach(op => {
+      const pill = document.createElement('span');
+      pill.textContent = op;
+      pill.style.cssText = 'font-size:10px;background:rgba(249,115,22,.1);color:var(--c-srv);padding:2px 8px;border-radius:99px;border:0.5px solid rgba(249,115,22,.25);line-height:1.6;';
+      pillsRow.appendChild(pill);
+    });
+  }
 
-  row.appendChild(nm); row.appendChild(pw); row.appendChild(qw); row.appendChild(actWrap);
+  // Linha 3: divisor + preço + qty
+  const linha3 = document.createElement('div');
+  linha3.style.cssText = 'display:flex;align-items:center;gap:8px;border-top:0.5px solid var(--border);padding:7px 0 9px;margin-top:2px;';
+
+  const pw = document.createElement('div'); pw.className = 'price-wrap';
+  const pp = document.createElement('span'); pp.className = 'price-prefix'; pp.textContent = 'R$';
+  const pi = document.createElement('input'); pi.className = 'price-input';
+  pi.style.cssText = 'font-size:13px;width:80px;';
+  const pv = typeof s.v === 'number' ? s.v.toFixed(0) + ',00' : s.v;
+  pi.value = pv;
+  pi.addEventListener('input', function() { formatPriceInput(this); updateFloatingButton(); });
+  pw.appendChild(pp); pw.appendChild(pi);
+
+  const qw = document.createElement('div'); qw.className = 'qty-wrap';
+  qw.style.marginLeft = 'auto';
+  const qm = document.createElement('button'); qm.className = 'qty-btn'; qm.textContent = '−';
+  qm.addEventListener('click', function() { changeQty(this, -1); updateFloatingButton(); propagateQtyToMaterials(row); });
+  const qi = document.createElement('input');
+  qi.className = 'qty-val'; qi.type = 'number'; qi.value = '1'; qi.min = '1';
+  qi.addEventListener('input', function() { updateFloatingButton(); propagateQtyToMaterials(row); });
+  const qp = document.createElement('button'); qp.className = 'qty-btn'; qp.textContent = '+';
+  qp.addEventListener('click', function() { changeQty(this, 1); updateFloatingButton(); propagateQtyToMaterials(row); });
+  qw.appendChild(qm); qw.appendChild(qi); qw.appendChild(qp);
+
+  linha3.appendChild(pw); linha3.appendChild(qw);
+
+  row.appendChild(linha1);
+  if (pillsRow) row.appendChild(pillsRow);
+  row.appendChild(linha3);
+
   c.appendChild(row);
   updateServiceBadge(); updateFloatingButton();
   if (e && e.target) flashButton(e.target);
-  showToast((s.icon ? s.icon + ' ' : '') + s.n + ' adicionado');
+  showToast((s.icon ? s.icon + ' ' : '') + s.n.split(' · ')[0] + ' adicionado');
 }
 
 function propagateQtyToMaterials(srvRow) {
@@ -3094,16 +3153,15 @@ function propagateQtyToMaterials(srvRow) {
   if (!srvId) return;
   const newQty = parseInt(srvRow.querySelector('.qty-val')?.value || 1);
   document.querySelectorAll(`#mat-container .mat-row[data-linked-srv="${srvId}"]`).forEach(mr => {
-    // Só atualiza quantidade se não foi editada manualmente
     if (mr.dataset.qtyManual === '1') return;
     const baseQty = parseFloat(mr.dataset.baseQty || 1);
     const qi = mr.querySelector('.qty-val');
     const pi = mr.querySelector('.price-input');
     const baseUnitPrice = parseFloat(mr.dataset.baseUnitPrice || 0);
     if (qi) qi.value = Math.max(1, Math.round(baseQty * newQty));
+    // price-input sempre guarda o preço UNITÁRIO — collectMaterials multiplica por qty
     if (pi && baseUnitPrice > 0 && !mr.dataset.priceManual) {
-      const total = baseUnitPrice * baseQty * newQty;
-      pi.value = total.toFixed(2).replace('.', ',');
+      pi.value = baseUnitPrice.toFixed(2).replace('.', ',');
     }
     updateMaterialBadge();
   });
@@ -3474,15 +3532,20 @@ async function sharePDF() {
   if (appState.logoBase64) {
     printLogo.src = appState.logoBase64;
     printLogo.style.display = 'block';
-    printBg.style.backgroundImage = 'url(' + appState.logoBase64 + ')';
-    printBg.style.backgroundSize = 'contain';
-    printBg.style.backgroundPosition = 'center';
-    printBg.style.backgroundRepeat = 'no-repeat';
-    printBg.style.opacity = '0.12';
-    printBg.style.display = 'block';
+    // Grade de logos pequenas no fundo do PDF
+    if (printBg) {
+      printBg.innerHTML = '';
+      printBg.style.cssText = 'position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:10px;align-items:center;justify-items:center;pointer-events:none;';
+      for (let i = 0; i < 64; i++) {
+        const img = document.createElement('img');
+        img.src = appState.logoBase64;
+        img.style.cssText = 'width:32px;height:32px;opacity:0.05;border-radius:6px;object-fit:contain;';
+        printBg.appendChild(img);
+      }
+    }
   } else {
     printLogo.style.display = 'none';
-    printBg.style.display = 'none';
+    if (printBg) { printBg.style.display = 'none'; printBg.innerHTML = ''; }
   }
 
   const tbody = document.getElementById('printServicesList');
@@ -3861,6 +3924,7 @@ function confirmCrop() {
   appState.logoMoldura = _cropMoldura;
   saveState();
   applyLogoUI();
+  initLogoBgs();
   closeCropModal();
   showToast('✅ Logo salva!');
 }
@@ -4513,17 +4577,51 @@ function agCalcularRelatorio() {
   });
 }
 
-let _matClienteFornece = false; // false = você vende o material; true = cliente fornece
+let _matClienteFornece = false;
 
 function toggleMatCliente() {
   _matClienteFornece = !_matClienteFornece;
   const tog = document.getElementById('mat-cliente-toggle');
-  const sub = document.getElementById('mat-cliente-sub');
   if (tog) tog.classList.toggle('on', _matClienteFornece);
-  if (sub) sub.textContent = _matClienteFornece
-    ? 'PDF mostra só mão de obra (sem materiais)'
-    : 'PDF inclui valor dos materiais';
 }
+
+// ── Fundos de logo ──
+function getLogoSrc() {
+  return appState.logoBase64 || _defaultBoltSvg();
+}
+
+function _defaultBoltSvg() {
+  return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230f172a'/%3E%3Cpolygon points='290,80 210,280 260,280 220,432 380,200 310,200 370,80' fill='%23f97316'/%3E%3C/svg%3E";
+}
+
+function renderLogoBg(containerId, mode) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  const src = getLogoSrc();
+  if (mode === 'center') {
+    // 1 logo grande central desfocada
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.cssText = 'width:140px;height:140px;opacity:0.06;filter:blur(3px);border-radius:24px;object-fit:contain;';
+    el.appendChild(img);
+  } else if (mode === 'grid') {
+    // grade repetida pequena
+    el.style.cssText = 'position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:6px;align-items:center;justify-items:center;pointer-events:none;z-index:0;overflow:hidden';
+    for (let i = 0; i < 40; i++) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.style.cssText = 'width:26px;height:26px;opacity:0.04;border-radius:5px;object-fit:contain;';
+      el.appendChild(img);
+    }
+  }
+}
+
+function initLogoBgs() {
+  renderLogoBg('res-logo-bg', 'center');
+}
+
+const _origShowScreen = typeof showScreen === 'function' ? showScreen : null;
 
 let _miniConfirmResolve = null;
 function miniConfirm(name) {
@@ -4546,12 +4644,11 @@ document.addEventListener('DOMContentLoaded', function() {
   requestWarrantyNotifications();
   const dsEl = document.getElementById('dataServico');
   if (dsEl) dsEl.valueAsDate = new Date();
-  
   const anoEl = document.getElementById('ag-rel-ano');
   if (anoEl && !anoEl.value) anoEl.value = new Date().getFullYear();
-  
   const mesEl = document.getElementById('ag-rel-mes');
   if (mesEl) mesEl.value = new Date().getMonth();
+  initLogoBgs();
 });
 
 function requestWarrantyNotifications() {
