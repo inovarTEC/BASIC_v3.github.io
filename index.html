@@ -3380,18 +3380,6 @@ async function sharePDF() {
   set('printMateriais', formatBRL(d.mat));
   set('printLogistica', formatBRL(d.custoLog || 0));
 
-  const semMat = _matClienteFornece;
-  const totalPDF = semMat ? (d.total - (d.mat || 0)) : d.total;
-  set('printTotal', formatBRL(totalPDF));
-
-  // Fix sinal using totalPDF
-  const sinal = totalPDF * (sinalPct / 100);
-  // Nota no PDF se cliente fornece material
-  if (notaMatEl) {
-    notaMatEl.style.display = semMat ? 'block' : 'none';
-    notaMatEl.textContent = semMat ? '⚠️ Materiais por conta do cliente — valor acima refere-se somente à mão de obra.' : '';
-  }
-
   const tel = appState.telefonePrestador;
   const ig = appState.instagram;
   const pix = appState.chavePix;
@@ -3399,6 +3387,17 @@ async function sharePDF() {
   const validade = appState.validadeDias || 15;
   const cartoes = appState.cartoes;
   const sinalPct = appState.sinalPercent || 30;
+  const semMat = _matClienteFornece;
+  const totalPDF = semMat ? (d.total - (d.mat || 0)) : d.total;
+  const sinal = totalPDF * (sinalPct / 100);
+
+  set('printTotal', formatBRL(totalPDF));
+
+  const notaMatEl = document.getElementById('printNotaMat');
+  if (notaMatEl) {
+    notaMatEl.style.display = semMat ? 'block' : 'none';
+    notaMatEl.textContent = semMat ? '⚠️ Materiais por conta do cliente — valor acima refere-se somente à mão de obra.' : '';
+  }
 
   set('printTelPrestadorVal', tel);
   show('printTelPrestador', !!tel);
