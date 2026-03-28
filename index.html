@@ -1190,9 +1190,13 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
       <span style="font-size:12px;color:var(--txt2)">➕ Acréscimo</span>
       <span id="displayAcrescimo" style="font-size:12px;font-weight:700;color:var(--txt)"></span>
     </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;cursor:pointer" onclick="toggleMatCliente()">
-      <span style="font-size:12px;color:var(--txt2)">📦 Cliente fornece material?</span>
-      <div id="mat-cliente-toggle" class="toggle-switch"><div class="toggle-thumb"></div></div>
+    <div style="padding:10px 0">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:8px">📦 Fornecimento de material</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <button id="mat-opt-eletricista" onclick="setMatMode('eletricista')" style="padding:8px 4px;border-radius:10px;border:2px solid var(--accent);background:rgba(37,99,235,.1);color:var(--accent);font-family:var(--font-display);font-size:10px;font-weight:700;cursor:pointer;line-height:1.3;transition:all .2s">✅ Eletricista<br>fornece</button>
+        <button id="mat-opt-cliente" onclick="setMatMode('cliente')" style="padding:8px 4px;border-radius:10px;border:2px solid var(--border);background:var(--surface2);color:var(--txt2);font-family:var(--font-display);font-size:10px;font-weight:700;cursor:pointer;line-height:1.3;transition:all .2s">🛒 Cliente<br>compra</button>
+        <button id="mat-opt-nenhum" onclick="setMatMode('nenhum')" style="padding:8px 4px;border-radius:10px;border:2px solid var(--border);background:var(--surface2);color:var(--txt2);font-family:var(--font-display);font-size:10px;font-weight:700;cursor:pointer;line-height:1.3;transition:all .2s">➖ Não<br>incluir</button>
+      </div>
     </div>
   </div>
 
@@ -1604,8 +1608,8 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
             <div id="printPrestador" style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f1f5f9;line-height:1.1">Eletricista</div>
             <div style="font-size:11px;color:#64748b;margin-top:5px;display:flex;gap:10px;flex-wrap:wrap">
               <span id="printTelPrestador" style="display:none">📱 <span id="printTelPrestadorVal"></span></span>
-              <a id="printInstagramSpan" href="#" target="_blank" style="display:none;align-items:center;gap:5px;text-decoration:none;color:#94a3b8">
-                <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <a id="printInstagramSpan" href="#" target="_blank" style="display:none;align-items:center;gap:6px;text-decoration:none;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:4px 12px 4px 8px">
+                <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
                   <defs>
                     <radialGradient id="igh" cx="30%" cy="107%" r="150%">
                       <stop offset="0%" stop-color="#fdf497"/>
@@ -1619,7 +1623,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
                   <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/>
                   <circle cx="17.2" cy="6.8" r="1.3" fill="white"/>
                 </svg>
-                <span id="printInstagramVal" style="color:#818cf8;font-weight:700"></span>
+                <span id="printInstagramVal" style="color:#818cf8;font-weight:700;font-size:12px"></span>
               </a>
               <span id="printPixSpan" style="display:none">💠 PIX: <span id="printPixVal"></span></span>
             </div>
@@ -1643,7 +1647,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <div style="padding:0 28px 28px">
 
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
         <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px">
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:8px">👤 Cliente</div>
           <div id="printCliente" style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:4px">Nome do Cliente</div>
@@ -1655,6 +1659,11 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <div id="printDetalhes" style="font-size:12px;color:#475569;line-height:1.6"></div>
           <div id="printGarantiaLine" style="font-size:11px;color:#16a34a;font-weight:700;margin-top:8px;display:flex;align-items:center;gap:4px">✅ Garantia: <span id="printGarantia">90 dias</span></div>
         </div>
+      </div>
+
+      <div id="printMatBadge" style="display:none;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid;margin-bottom:16px">
+        <span class="mat-badge-icon" style="font-size:15px"></span>
+        <span class="mat-badge-text" style="font-size:11px;font-weight:700"></span>
       </div>
 
 
@@ -1727,11 +1736,11 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <span id="printCartoes" style="display:block"></span>
           Validade deste orçamento: <span id="printValidade" style="font-weight:700;color:#0f172a">15 dias</span>
 
-          <div id="printIgWrapper" style="display:none;margin-top:10px">
-            <div style="font-size:11px;color:#64748b;font-style:italic;margin-bottom:8px">Quer saber mais sobre nós? Clica e segue 👇</div>
-            <a id="printIgFooter" href="#" target="_blank" style="display:inline-block;text-decoration:none;border:2px solid #e0d7ff;border-radius:14px;padding:14px 18px;background:linear-gradient(135deg,rgba(124,77,255,.06),rgba(240,98,146,.06))">
-              <div style="display:flex;align-items:center;gap:12px">
-                <svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <div id="printIgWrapper" style="display:none;margin-top:14px">
+            <div style="font-size:11px;color:#64748b;font-style:italic;margin-bottom:10px">Quer nos acompanhar? Clica e segue 👇</div>
+            <a id="printIgFooter" href="#" target="_blank" style="display:block;text-decoration:none;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#405de6,#5851db,#833ab4,#c13584,#e1306c,#fd1d1d,#f56040,#f77737,#fcaf45);padding:2px">
+              <div style="background:#fff;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px">
+                <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
                   <defs>
                     <radialGradient id="ig1" cx="30%" cy="107%" r="150%">
                       <stop offset="0%" stop-color="#fdf497"/>
@@ -1745,10 +1754,11 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
                   <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/>
                   <circle cx="17.2" cy="6.8" r="1.3" fill="white"/>
                 </svg>
-                <div>
-                  <div id="printIgHandle" style="font-size:16px;font-weight:800;color:#1e293b;line-height:1.2"></div>
-                  <div id="printIgUrl" style="font-size:11px;color:#818cf8;font-weight:600;margin-top:2px"></div>
+                <div style="flex:1;min-width:0">
+                  <div id="printIgHandle" style="font-size:18px;font-weight:800;color:#1e293b;line-height:1.2"></div>
+                  <div id="printIgUrl" style="font-size:11px;color:#818cf8;font-weight:600;margin-top:3px"></div>
                 </div>
+                <div style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcaf45);color:#fff;font-size:11px;font-weight:700;padding:8px 16px;border-radius:99px;flex-shrink:0;white-space:nowrap;letter-spacing:.04em">SEGUIR ↗</div>
               </div>
             </a>
           </div>
@@ -2339,10 +2349,7 @@ function renderHistory() {
 function loadFromHistory(item) {
   if (!confirm('Carregar orçamento de ' + item.cliente + '?')) return;
   switchMainTab('orcamento');
-  // Resetar estado do toggle de material
-  _matClienteFornece = false;
-  const matTog = document.getElementById('mat-cliente-toggle');
-  if (matTog) matTog.classList.remove('on');
+  _matMode = 'eletricista';
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
   set('nomeCliente', item.cliente);
   set('enderecoCliente', item.endereco);
@@ -3303,6 +3310,8 @@ function calculateQuote() {
   const hora = document.getElementById('horaServico')?.value || '';
   const garantia = parseInt(document.getElementById('inputGarantia')?.value) || 90;
   const dataFmt = dataRaw ? dataRaw.split('-').reverse().join('/') : '--/--/--';
+  // Calcular totais com e sem material
+  const totaisSemMat = computeTotals(totalServicos, 0);
   currentQuote = {
     id: Date.now(),
     seq: appState.orcamentoSeq++,
@@ -3311,6 +3320,9 @@ function calculateQuote() {
     data: dataFmt, dataRaw, hora,
     itens, itensMat,
     total: totais.totalFinal,
+    totalComMat: totais.totalFinal,
+    totalSemMat: totaisSemMat.totalFinal,
+    matBruto: mat,
     totalServicos,
     mat, custoLog: totais.custoLog,
     horas: parseFloat(document.getElementById('tempoHoras')?.value) || 0,
@@ -3324,6 +3336,9 @@ function calculateQuote() {
     garantia,
     garantiaStr: garantia + ' dias',
   };
+  // Reset material mode to default
+  _matMode = 'eletricista';
+  setMatMode('eletricista');
   saveClient(cliente, telefone, endereco);
   saveToHistory(currentQuote);
   saveState();
@@ -3362,17 +3377,40 @@ async function sharePDF() {
   set('printNumOrc', anoAtual + '-' + String(d.seq).padStart(4,'0'));
   set('printGarantia', d.garantiaStr);
   set('printMaoObra', formatBRL(d.totalServicos || 0));
-  set('printMateriais', formatBRL(d.mat));
+  set('printMateriais', formatBRL(_matMode === 'eletricista' ? (d.matBruto || d.mat || 0) : 0));
   set('printLogistica', formatBRL(d.custoLog || 0));
 
-  const semMat = _matClienteFornece;
-  const totalPDF = semMat ? (d.total - (d.mat || 0)) : d.total;
+  const totalPDF = _matMode === 'eletricista' ? (d.totalComMat || d.total) : (d.totalSemMat || d.total - (d.matBruto||d.mat||0));
   set('printTotal', formatBRL(totalPDF));
-  // Nota no PDF se cliente fornece material
+
+  // Badge de fornecimento no PDF
   const notaMatEl = document.getElementById('printNotaMat');
   if (notaMatEl) {
-    notaMatEl.style.display = semMat ? 'block' : 'none';
-    notaMatEl.textContent = semMat ? '⚠️ Materiais por conta do cliente — valor acima refere-se somente à mão de obra.' : '';
+    const msgs = {
+      eletricista: '',
+      cliente: '🛒 Materiais por conta do cliente — lista fornecida apenas para referência.',
+      nenhum: '➖ Orçamento sem materiais — somente mão de obra.',
+    };
+    const msg = msgs[_matMode] || '';
+    notaMatEl.style.display = msg ? 'block' : 'none';
+    notaMatEl.textContent = msg;
+  }
+
+  // Badge de modo de material no cabeçalho do PDF
+  const matBadgeEl = document.getElementById('printMatBadge');
+  if (matBadgeEl) {
+    const badges = {
+      eletricista: {icon:'✅', text:'Materiais inclusos pelo eletricista', color:'#16a34a', bg:'rgba(34,197,94,.08)', border:'rgba(34,197,94,.2)'},
+      cliente:     {icon:'🛒', text:'Materiais por conta do cliente', color:'#d97706', bg:'rgba(245,158,11,.08)', border:'rgba(245,158,11,.2)'},
+      nenhum:      {icon:'➖', text:'Somente mão de obra — sem materiais', color:'#64748b', bg:'rgba(100,116,139,.08)', border:'rgba(100,116,139,.2)'},
+    };
+    const b = badges[_matMode];
+    matBadgeEl.style.display = 'flex';
+    matBadgeEl.style.background = b.bg;
+    matBadgeEl.style.borderColor = b.border;
+    matBadgeEl.querySelector('.mat-badge-icon').textContent = b.icon;
+    matBadgeEl.querySelector('.mat-badge-text').textContent = b.text;
+    matBadgeEl.querySelector('.mat-badge-text').style.color = b.color;
   }
 
   const tel = appState.telefonePrestador;
@@ -3439,10 +3477,38 @@ async function sharePDF() {
     else horasRow.style.display = 'none';
   }
 
-  // Mostrar/ocultar materiais conforme toggle
-  const _ocultarMat = _matClienteFornece;
-  if (d.mat > 0 && !_ocultarMat) document.getElementById('printMatRow').style.display = 'flex';
-  else document.getElementById('printMatRow').style.display = 'none';
+  // Mostrar/ocultar linha de materiais no resumo financeiro
+  const matBruto = d.matBruto || d.mat || 0;
+  const showMatRow = _matMode === 'eletricista' && matBruto > 0;
+  document.getElementById('printMatRow').style.display = showMatRow ? 'flex' : 'none';
+
+  // Mostrar/ocultar tabela de materiais no PDF
+  const matSection = document.getElementById('printMatSection');
+  const matList    = document.getElementById('printMatList');
+  if (matSection && matList) {
+    matList.innerHTML = '';
+    if (_matMode === 'nenhum' || !d.itensMat || !d.itensMat.length) {
+      matSection.style.display = 'none';
+    } else {
+      matSection.style.display = 'block';
+      d.itensMat.forEach((m, idx) => {
+        const tr = matList.insertRow();
+        tr.style.cssText = 'border-bottom:1px solid #f1f5f9;background:' + (idx%2===0?'#fff':'#f8fafc');
+        const showPrice = _matMode === 'eletricista';
+        const cells = [
+          {v: m.nome,  a:'left',   pad:'9px 12px', fw:'600'},
+          {v: m.qtd,   a:'center', pad:'9px 8px'},
+          {v: showPrice ? formatBRL(m.unitario) : '—', a:'right', pad:'9px 8px', c:'#64748b'},
+          {v: showPrice ? formatBRL(m.total)    : '—', a:'right', pad:'9px 12px', fw:'700', c:'#0f172a'},
+        ];
+        cells.forEach(c => {
+          const td = tr.insertCell();
+          td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}`;
+          td.textContent = c.v;
+        });
+      });
+    }
+  }
 
   const discRow = document.getElementById('printDiscRow');
   if (discRow) {
@@ -3497,29 +3563,6 @@ async function sharePDF() {
     });
   });
 
-  const matSection = document.getElementById('printMatSection');
-  const matList = document.getElementById('printMatList');
-  matList.innerHTML = '';
-  if (d.itensMat && d.itensMat.length && !_matClienteFornece) {
-    matSection.style.display = 'block';
-    d.itensMat.forEach((m, idx) => {
-      const tr = matList.insertRow();
-      tr.style.cssText = 'border-bottom:1px solid #f1f5f9;background:' + (idx%2===0?'#fff':'#f8fafc');
-      const cells = [
-        {v: m.nome, a: 'left', pad: '9px 12px', fw: '600'},
-        {v: m.qtd, a: 'center', pad: '9px 8px'},
-        {v: formatBRL(m.unitario), a: 'right', pad: '9px 8px', c: '#64748b'},
-        {v: formatBRL(m.total), a: 'right', pad: '9px 12px', fw: '700', c: '#0f172a'},
-      ];
-      cells.forEach(c => {
-        const td = tr.insertCell();
-        td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}`;
-        td.textContent = c.v;
-      });
-    });
-  } else {
-    matSection.style.display = 'none';
-  }
   const el = document.getElementById('printable-area');
   const btn = document.getElementById('btnPDF');
   const label = document.getElementById('labelPDF');
@@ -3541,18 +3584,18 @@ async function sharePDF() {
 
   try {
     // Pipeline que expõe o jsPDF para adicionar anotações de link
-    const worker = html2pdf().set(opt).from(el).toPdf();
+    let worker = html2pdf().set(opt).from(el).toPdf();
 
-    // Adiciona link clicável sobre o botão do Instagram no PDF
+    // Adiciona link clicável sobre o botão do Instagram no PDF (aguarda antes de gerar blob)
     if (igUrl) {
-      worker.get('pdf').then(pdf => {
-        const pages = pdf.internal.getNumberOfPages();
+      worker = worker.get('pdf').then(pdf => {
         const pageH = pdf.internal.pageSize.getHeight();
         const pageW = pdf.internal.pageSize.getWidth();
-        // Link no cabeçalho (header) — posição aproximada do printInstagramSpan
-        pdf.link(12, 22, 60, 8, { url: igUrl });
-        // Link no rodapé — posição aproximada do botão Instagram footer
-        pdf.link(12, pageH - 38, pageW - 24, 16, { url: igUrl });
+        // Link no cabeçalho — cobre o pill com @handle (área generosa)
+        pdf.link(12, 18, 110, 10, { url: igUrl });
+        // Link no rodapé — cobre o banner inteiro (largura total, altura do banner)
+        pdf.link(12, pageH - 52, pageW - 24, 28, { url: igUrl });
+        return pdf;
       });
     }
 
@@ -3634,10 +3677,9 @@ function resetForm() {
   const tipo = document.getElementById('tipoServico');
   if (tipo) { tipo.selectedIndex = 0; tipo.style.color = ''; }
   currentQuote = null;
-  _matClienteFornece = false;
+  _matMode = 'eletricista';
+  setMatMode('eletricista');
   srvPendente = null; matPendente = null;
-  const matTog = document.getElementById('mat-cliente-toggle');
-  if (matTog) matTog.classList.remove('on');
   const spc = document.getElementById('srv-pending-card');
   if (spc) spc.classList.remove('show');
   const mpc = document.getElementById('mat-pending-card');
@@ -4553,24 +4595,51 @@ function _agCalcularRelatorioImpl() {
   });
 }
 
-let _matClienteFornece = false;
+
+let _matMode = 'eletricista'; // 'eletricista' | 'cliente' | 'nenhum'
+
+function setMatMode(mode) {
+  _matMode = mode;
+  // Update button styles
+  const opts = {
+    eletricista: document.getElementById('mat-opt-eletricista'),
+    cliente:     document.getElementById('mat-opt-cliente'),
+    nenhum:      document.getElementById('mat-opt-nenhum'),
+  };
+  const activeColor = { eletricista: 'var(--accent)', cliente: '#f97316', nenhum: '#ef4444' };
+  const activeBg    = { eletricista: 'rgba(37,99,235,.1)', cliente: 'rgba(249,115,22,.1)', nenhum: 'rgba(239,68,68,.1)' };
+  Object.keys(opts).forEach(k => {
+    const btn = opts[k];
+    if (!btn) return;
+    if (k === mode) {
+      btn.style.borderColor = activeColor[k];
+      btn.style.background  = activeBg[k];
+      btn.style.color       = activeColor[k];
+    } else {
+      btn.style.borderColor = 'var(--border)';
+      btn.style.background  = 'var(--surface2)';
+      btn.style.color       = 'var(--txt2)';
+    }
+  });
+  // Recalculate displayed total
+  if (currentQuote) {
+    const mat = currentQuote.matBruto || currentQuote.mat || 0;
+    const total = mode === 'eletricista'
+      ? currentQuote.totalComMat
+      : currentQuote.totalSemMat;
+    const el = document.getElementById('displayPrecoFinal');
+    if (el) el.textContent = formatBRL(total);
+    const matRow = document.getElementById('displayMateriais');
+    if (matRow) matRow.textContent = mode === 'eletricista' ? formatBRL(mat) : formatBRL(0);
+    const lucroEl = document.getElementById('displayLucroLiquido');
+    if (lucroEl) lucroEl.textContent = formatBRL(total - (mode === 'eletricista' ? mat : 0) - (currentQuote.custoLog||0) - (currentQuote.custoHoras||0));
+    const despEl = document.getElementById('displayDespesas');
+    if (despEl) despEl.textContent = formatBRL((mode === 'eletricista' ? mat : 0) + (currentQuote.custoLog||0) + (currentQuote.custoHoras||0));
+  }
+}
 
 function voltarEditar() {
   switchMainTab('orcamento');
-}
-
-function toggleMatCliente() {
-  _matClienteFornece = !_matClienteFornece;
-  const tog = document.getElementById('mat-cliente-toggle');
-  if (tog) tog.classList.toggle('on', _matClienteFornece);
-  // Atualizar total exibido
-  if (currentQuote) {
-    const totalPDF = _matClienteFornece ? (currentQuote.total - (currentQuote.mat || 0)) : currentQuote.total;
-    const el = document.getElementById('displayPrecoFinal');
-    if (el) el.textContent = formatBRL(totalPDF);
-    const lucrEl = document.getElementById('displayLucroLiquido');
-    if (lucrEl) lucrEl.textContent = formatBRL(totalPDF - (currentQuote.mat || 0) - (currentQuote.custoLog || 0) - (currentQuote.custoHoras || 0));
-  }
 }
 
 
