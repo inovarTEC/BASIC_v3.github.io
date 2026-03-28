@@ -59,9 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
   --font-display: 'Syne', sans-serif;
@@ -2047,30 +2047,6 @@ const MAT = [
 {n:"Graxa dieletrica para conexoes",p:18,t:"",cat:"fix",icon:"💧"}
 ];
 
-const SRV_CHIPS = [
-  {k:'',l:'Todos',cls:'cs-all',icon:''},
-  {k:'res',l:'Residencial',cls:'cs-res',icon:''},
-  {k:'com',l:'Comercial',cls:'cs-com',icon:''},
-  {k:'ind',l:'Industrial',cls:'cs-ind',icon:''},
-  {k:'ate',l:'Aterramento',cls:'cs-ate',icon:''},
-  {k:'ar',l:'Ar-cond',cls:'cs-ar',icon:''},
-  {k:'man',l:'Manutenção',cls:'cs-man',icon:''},
-  {k:'inf',l:'Infraestrutura',cls:'cs-inf',icon:''},
-  {k:'seg',l:'Automação',cls:'cs-seg',icon:''},
-];
-
-const MAT_CHIPS = [
-  {k:'',l:'Todos',cls:'cm-all',icon:''},
-  {k:'cond',l:'Condutores',cls:'cm-cond',icon:''},
-  {k:'prot',l:'Proteção',cls:'cm-prot',icon:''},
-  {k:'elet',l:'Eletrodutos',cls:'cm-elet',icon:''},
-  {k:'cxq',l:'Caixas/Quadros',cls:'cm-cxq',icon:''},
-  {k:'disp',l:'Dispositivos',cls:'cm-disp',icon:''},
-  {k:'ilu',l:'Iluminação',cls:'cm-ilu',icon:''},
-  {k:'ate',l:'Aterramento',cls:'cm-ate',icon:''},
-  {k:'fix',l:'Fixação',cls:'cm-fix',icon:''},
-];
-
 const SRV_CATS = [
   {k:'res',icon:'🏠',name:'Residencial'},
   {k:'com',icon:'🏢',name:'Comercial'},
@@ -2116,8 +2092,6 @@ let appState = {
 };
 
 let currentQuote = null;
-let srvActiveCat = null;
-let matActiveCat = null;
 let srvCatalog = [];
 let matCatalog = [];
 const openCats = new Set();
@@ -2293,14 +2267,6 @@ function saveToHistory(dados) {
   saveState();
 }
 
-function openHistory() {
-  switchMainTab('historico');
-}
-
-function closeHistory() {
-  switchMainTab('orcamento');
-}
-
 function renderHistory() {
   const list = document.getElementById('historyList');
   list.innerHTML = '';
@@ -2341,7 +2307,7 @@ function renderHistory() {
 
 function loadFromHistory(item) {
   if (!confirm('Carregar orçamento de ' + item.cliente + '?')) return;
-  closeHistory();
+  switchMainTab('orcamento');
   // Resetar estado do toggle de material
   _matClienteFornece = false;
   const matTog = document.getElementById('mat-cliente-toggle');
@@ -2664,17 +2630,6 @@ function abrirConfiguradorMaterialPendente() {
   const fakeE = { target: document.getElementById('mat-inline-search'), stopPropagation: ()=>{} };
   addMaterial(fakeE, matPendente);
   limparMaterialPendente();
-}
-
-function reabrirConfigurador(srvData, row) {
-  abrirConfigurador(srvData);
-  // Após adicionar via configurador, remove a row antiga
-  if (row) {
-    const origSrvId = row.dataset.srvId;
-    const origOnAdd = scpAtivo ? scpAtivo._onAfterAdd : null;
-    // Substituir scpAdicionar para remover row antiga
-    scpAtivo._rowToReplace = row;
-  }
 }
 
 function abrirConfigurador(srvData) {
@@ -3401,6 +3356,17 @@ async function sharePDF() {
   const igFooter = document.getElementById('printIgFooter');
   const igWrapper = document.getElementById('printIgWrapper');
   const igHandleEl = document.getElementById('printIgHandle');
+  const igSpanEl = document.getElementById('printInstagramSpan');
+  const igValEl = document.getElementById('printInstagramVal');
+  if (igSpanEl) {
+    if (igHandle) {
+      igSpanEl.style.display = 'inline-flex';
+      igSpanEl.href = 'https://instagram.com/' + igHandle;
+      if (igValEl) igValEl.textContent = '@' + igHandle;
+    } else {
+      igSpanEl.style.display = 'none';
+    }
+  }
   if (igWrapper) {
     if (igHandle) {
       igWrapper.style.display = 'block';
@@ -3468,16 +3434,10 @@ async function sharePDF() {
   if (appState.logoBase64) {
     printLogo.src = appState.logoBase64;
     printLogo.style.display = 'block';
-    // Grade de logos pequenas no fundo do PDF
     if (printBg) {
       printBg.innerHTML = '';
-      printBg.style.cssText = 'position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:10px;align-items:center;justify-items:center;pointer-events:none;';
-      for (let i = 0; i < 40; i++) {
-        const img = document.createElement('img');
-        img.src = appState.logoBase64;
-        img.style.cssText = 'width:32px;height:32px;opacity:0.05;border-radius:6px;object-fit:contain;';
-        printBg.appendChild(img);
-      }
+      printBg.style.cssText = 'position:absolute;inset:0;pointer-events:none;opacity:0.05;background-image:url(' + appState.logoBase64 + ');background-size:40px 40px;background-repeat:repeat;';
+      printBg.style.display = 'block';
     }
   } else {
     printLogo.style.display = 'none';
@@ -3930,7 +3890,9 @@ function applyLogoUI() {
     if (logoImg) { logoImg.src = appState.logoBase64; logoImg.style.borderRadius = (appState.logoMoldura === 'round') ? '50%' : '6px'; }
     if (logoArea) logoArea.classList.add('show');
     if (printLogo) { printLogo.src = appState.logoBase64; printLogo.style.display = 'block'; }
-    if (printBg) printBg.style.display = 'block';
+    if (printBg) {
+      printBg.style.cssText = 'position:absolute;inset:0;pointer-events:none;opacity:0.05;background-image:url(' + appState.logoBase64 + ');background-size:40px 40px;background-repeat:repeat;display:block;';
+    }
   } else {
     if (pa) pa.style.display = 'none';
     if (rb) rb.style.display = 'none';
@@ -4482,8 +4444,23 @@ function agListarGarantias() {
 }
 
 let _agChart = null;
+let _chartJsLoaded = false;
+
+function _loadChartJs(cb) {
+  if (typeof Chart !== 'undefined') { cb(); return; }
+  if (_chartJsLoaded) { setTimeout(() => _loadChartJs(cb), 50); return; }
+  _chartJsLoaded = true;
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+  s.onload = cb;
+  s.onerror = () => { _chartJsLoaded = false; showToast('Erro ao carregar gráfico'); };
+  document.head.appendChild(s);
+}
 
 function agAtualizarGrafico() {
+  _loadChartJs(_agAtualizarGraficoImpl);
+}
+function _agAtualizarGraficoImpl() {
   const ano = parseInt(document.getElementById('ag-rel-ano')?.value, 10);
   const hist = appState.historico || [];
   const graficoDiv = document.getElementById('ag-grafico-anual');
@@ -4533,6 +4510,9 @@ function agAtualizarGrafico() {
 }
 
 function agCalcularRelatorio() {
+  _loadChartJs(_agCalcularRelatorioImpl);
+}
+function _agCalcularRelatorioImpl() {
   const mes = parseInt(document.getElementById('ag-rel-mes').value, 10);
   const ano = parseInt(document.getElementById('ag-rel-ano').value, 10);
   if (!ano || ano < 2000) { showToast('⚠️ Informe o ano.'); return; }
@@ -4551,7 +4531,7 @@ function agCalcularRelatorio() {
   document.getElementById('ag-rel-ticket').textContent = formatBRL(ticket);
   document.getElementById('ag-rel-mat').textContent    = formatBRL(totalMat);
   document.getElementById('ag-resultado-relatorio').style.display = 'block';
-  agAtualizarGrafico();
+  _agAtualizarGraficoImpl();
   const relLista = document.getElementById('ag-rel-lista');
   relLista.innerHTML = '';
   if (!filtrados.length) { relLista.innerHTML = '<div class="ag-empty">Nenhum orçamento neste período.</div>'; return; }
@@ -4584,39 +4564,20 @@ function toggleMatCliente() {
   }
 }
 
-function getLogoSrc() {
-  return appState.logoBase64 || _defaultBoltSvg();
-}
 
-function _defaultBoltSvg() {
-  return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230f172a'/%3E%3Cpolygon points='290,80 210,280 260,280 220,432 380,200 310,200 370,80' fill='%23f97316'/%3E%3C/svg%3E";
-}
-
-function renderLogoBg(containerId, mode) {
+function renderLogoBg(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
-  el.innerHTML = '';
-  const src = getLogoSrc();
-  if (mode === 'center') {
-    // 1 logo grande central desfocada
-    const img = document.createElement('img');
-    img.src = src;
-    img.style.cssText = 'width:140px;height:140px;opacity:0.06;filter:blur(3px);border-radius:24px;object-fit:contain;';
-    el.appendChild(img);
-  } else if (mode === 'grid') {
-    // grade repetida pequena
-    el.style.cssText = 'position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:6px;align-items:center;justify-items:center;pointer-events:none;z-index:0;overflow:hidden';
-    for (let i = 0; i < 40; i++) {
-      const img = document.createElement('img');
-      img.src = src;
-      img.style.cssText = 'width:26px;height:26px;opacity:0.04;border-radius:5px;object-fit:contain;';
-      el.appendChild(img);
-    }
+  if (appState.logoBase64) {
+    el.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;';
+    el.innerHTML = '<img src="' + appState.logoBase64 + '" style="width:140px;height:140px;opacity:0.06;filter:blur(3px);border-radius:24px;object-fit:contain;">';
+  } else {
+    el.innerHTML = '';
   }
 }
 
 function initLogoBgs() {
-  renderLogoBg('res-logo-bg', 'center');
+  renderLogoBg('res-logo-bg');
 }
 
 let _miniConfirmResolve = null;
