@@ -33,29 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const url = URL.createObjectURL(blob);
   const link = document.getElementById('pwa-manifest');
   if (link) link.href = url;
-
-
-  try {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512; canvas.height = 512;
-    const ctx = canvas.getContext('2d');
-    const bg = ctx.createLinearGradient(0, 0, 512, 512);
-    bg.addColorStop(0, '#0f172a');
-    bg.addColorStop(1, '#1e3a5f');
-    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath(); };
-    rr(0,0,512,512,112); ctx.fillStyle = bg; ctx.fill();
-    ctx.globalAlpha = 0.2; ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.ellipse(380,130,90,90,0,0,Math.PI*2); ctx.fill();
-    ctx.globalAlpha = 1;
-    const boltGrad = ctx.createLinearGradient(210, 80, 210, 432);
-    boltGrad.addColorStop(0, '#fbbf24');
-    boltGrad.addColorStop(1, '#f97316');
-    ctx.fillStyle = boltGrad;
-    ctx.beginPath();
-    ctx.moveTo(290,80); ctx.lineTo(210,280); ctx.lineTo(260,280); ctx.lineTo(220,432); ctx.lineTo(380,200); ctx.lineTo(310,200); ctx.lineTo(370,80);
-    ctx.closePath(); ctx.fill();
-    const atiEl = document.getElementById('apple-touch-icon');
-    if (atiEl) atiEl.href = canvas.toDataURL('image/png');
-  } catch(e) {}
 });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1711,22 +1688,26 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         <div style="font-size:11px;color:#94a3b8;line-height:1.8">
           <span id="printCartoes" style="display:block"></span>
           Validade deste orçamento: <span id="printValidade" style="font-weight:700;color:#0f172a">15 dias</span>
-          <div id="printIgWrapper" style="display:none;margin-top:6px">
-            <div style="font-size:10px;color:#94a3b8;margin-bottom:5px;font-style:italic">Quer saber mais sobre nós? 👇 e SEGUE</div>
-            <a id="printIgFooter" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:7px;text-decoration:none;padding:9px 14px;background:linear-gradient(135deg,#7c4dff,#f06292,#f9a825);border-radius:10px;box-shadow:0 3px 12px rgba(124,77,255,.35)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/><circle cx="17.2" cy="6.8" r="1.3" fill="white"/></svg>
-              <span style="display:flex;flex-direction:column;gap:1px">
-                <span id="printIgHandle" style="font-size:12px;font-weight:800;color:#1e3a5f;line-height:1"></span>
-                <span style="font-size:11px;font-weight:700;color:#1e3a5f;line-height:1">Veja nossos projetos 🔥 e segue! 👷‍♂️⚡</span>
-              </span>
-            </a>
-            <div id="printIgUrl" style="font-size:9px;color:#818cf8;margin-top:4px;letter-spacing:.02em"></div>
-          </div>
         </div>
         <div style="font-size:11px;color:#94a3b8;text-align:right;line-height:1.8">
           Gerado via <strong style="color:#2563eb">⚡ Eletricista Power</strong>
           <div style="font-size:9px;color:#cbd5e1;margin-top:2px">Documento gerado eletronicamente</div>
         </div>
+      </div>
+
+      <div id="printIgWrapper" style="display:none;margin:16px -28px -28px">
+        <a id="printIgFooter" href="#" target="_blank" style="display:block;text-decoration:none;background:linear-gradient(135deg,#1e0a3c,#4a1060,#7c1f6e);padding:18px 28px">
+          <div style="font-size:12px;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:8px;font-style:italic">Quer saber mais sobre nós? Clica e segue 👇</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#f9a825,#f06292,#7c4dff);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/><circle cx="17.2" cy="6.8" r="1.3" fill="white"/></svg>
+            </div>
+            <div>
+              <div id="printIgHandle" style="font-size:20px;font-weight:800;color:#fff;line-height:1.2"></div>
+              <div id="printIgUrl" style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px"></div>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -2113,8 +2094,6 @@ function formatMoneyInput(input) {
   v = (parseInt(v)/100).toFixed(2).replace('.',',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
   input.value = v;
 }
-
-const formatPriceInput = formatMoneyInput;
 
 function maskPhone(input) {
   let v = input.value.replace(/\D/g,'').substring(0,11);
