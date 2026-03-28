@@ -1720,6 +1720,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
                 <span style="font-size:11px;font-weight:700;color:#1e3a5f;line-height:1">Veja nossos projetos 🔥 e segue! 👷‍♂️⚡</span>
               </span>
             </a>
+            <div id="printIgUrl" style="font-size:9px;color:#818cf8;margin-top:4px;letter-spacing:.02em"></div>
           </div>
         </div>
         <div style="font-size:11px;color:#94a3b8;text-align:right;line-height:1.8">
@@ -3372,6 +3373,8 @@ async function sharePDF() {
       igWrapper.style.display = 'block';
       if (igFooter) igFooter.href = 'https://instagram.com/' + igHandle;
       if (igHandleEl) igHandleEl.textContent = '@' + igHandle;
+      const igUrlEl = document.getElementById('printIgUrl');
+      if (igUrlEl) igUrlEl.textContent = 'instagram.com/' + igHandle;
     } else {
       igWrapper.style.display = 'none';
     }
@@ -3500,22 +3503,38 @@ async function sharePDF() {
     html2canvas: {scale:2, useCORS:true, logging:false},
     jsPDF: {unit:'mm', format:'a4', orientation:'portrait'}
   };
+
+  // URL do Instagram para anotação de link no PDF (usa igHandle já calculado acima)
+  const igUrl = igHandle ? 'https://instagram.com/' + igHandle : '';
+
   try {
-    const worker = html2pdf().set(opt).from(el);
-    if (navigator.canShare) {
-      const blob = await worker.output('blob');
-      const file = new File([blob], opt.filename, {type:'application/pdf'});
-      if (navigator.canShare({files:[file]})) {
-        await navigator.share({files:[file], title:'Orçamento Elétrico', text:`Orçamento para ${d.cliente}`});
-      } else {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = opt.filename;
-        a.click();
-        URL.revokeObjectURL(a.href);
-      }
+    // Pipeline que expõe o jsPDF para adicionar anotações de link
+    const worker = html2pdf().set(opt).from(el).toPdf();
+
+    // Adiciona link clicável sobre o botão do Instagram no PDF
+    if (igUrl) {
+      worker.get('pdf').then(pdf => {
+        const pages = pdf.internal.getNumberOfPages();
+        const pageH = pdf.internal.pageSize.getHeight();
+        const pageW = pdf.internal.pageSize.getWidth();
+        // Link no cabeçalho (header) — posição aproximada do printInstagramSpan
+        pdf.link(12, 22, 60, 8, { url: igUrl });
+        // Link no rodapé — posição aproximada do botão Instagram footer
+        pdf.link(12, pageH - 38, pageW - 24, 16, { url: igUrl });
+      });
+    }
+
+    const blob = await worker.output('blob');
+    const file = new File([blob], opt.filename, {type:'application/pdf'});
+
+    if (navigator.canShare && navigator.canShare({files:[file]})) {
+      await navigator.share({files:[file], title:'Orçamento Elétrico', text:`Orçamento para ${d.cliente}`});
     } else {
-      await html2pdf().set(opt).from(el).save();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = opt.filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
     }
     showToast('✅ PDF gerado com sucesso!');
   } catch(err) {
