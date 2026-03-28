@@ -33,6 +33,29 @@ document.addEventListener('DOMContentLoaded', function() {
   const url = URL.createObjectURL(blob);
   const link = document.getElementById('pwa-manifest');
   if (link) link.href = url;
+
+
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512; canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    const bg = ctx.createLinearGradient(0, 0, 512, 512);
+    bg.addColorStop(0, '#0f172a');
+    bg.addColorStop(1, '#1e3a5f');
+    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath(); };
+    rr(0,0,512,512,112); ctx.fillStyle = bg; ctx.fill();
+    ctx.globalAlpha = 0.2; ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.ellipse(380,130,90,90,0,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
+    const boltGrad = ctx.createLinearGradient(210, 80, 210, 432);
+    boltGrad.addColorStop(0, '#fbbf24');
+    boltGrad.addColorStop(1, '#f97316');
+    ctx.fillStyle = boltGrad;
+    ctx.beginPath();
+    ctx.moveTo(290,80); ctx.lineTo(210,280); ctx.lineTo(260,280); ctx.lineTo(220,432); ctx.lineTo(380,200); ctx.lineTo(310,200); ctx.lineTo(370,80);
+    ctx.closePath(); ctx.fill();
+    const atiEl = document.getElementById('apple-touch-icon');
+    if (atiEl) atiEl.href = canvas.toDataURL('image/png');
+  } catch(e) {}
 });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -569,7 +592,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .iso-btn { padding: 3px 8px; font-size: 11px; font-weight: 700; border-radius: 6px; border: 1.5px solid var(--border); background: transparent; color: var(--txt2); cursor: pointer; transition: all .15s; white-space: nowrap; }
 .iso-btn.pvc { border-color: var(--accent); background: rgba(37,99,235,.08); color: var(--accent); }
 .iso-btn.xlpe { border-color: #16a34a; background: rgba(22,163,74,.08); color: #16a34a; }
-.mat-bottom { display: flex; align-items: center; gap: 6px; padding: 6px 10px; }
 .price-input {
   padding: 6px 4px 6px 18px;
   background: var(--surface);
@@ -1582,7 +1604,23 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
             <div id="printPrestador" style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f1f5f9;line-height:1.1">Eletricista</div>
             <div style="font-size:11px;color:#64748b;margin-top:5px;display:flex;gap:10px;flex-wrap:wrap">
               <span id="printTelPrestador" style="display:none">📱 <span id="printTelPrestadorVal"></span></span>
-              <a id="printInstagramSpan" href="#" target="_blank" style="display:none;color:#94a3b8;text-decoration:none">📸 <span id="printInstagramVal" style="color:#818cf8;font-weight:700"></span></a>
+              <a id="printInstagramSpan" href="#" target="_blank" style="display:none;align-items:center;gap:5px;text-decoration:none;color:#94a3b8">
+                <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <radialGradient id="igh" cx="30%" cy="107%" r="150%">
+                      <stop offset="0%" stop-color="#fdf497"/>
+                      <stop offset="5%" stop-color="#fdf497"/>
+                      <stop offset="45%" stop-color="#fd5949"/>
+                      <stop offset="60%" stop-color="#d6249f"/>
+                      <stop offset="90%" stop-color="#285AEB"/>
+                    </radialGradient>
+                  </defs>
+                  <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igh)"/>
+                  <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/>
+                  <circle cx="17.2" cy="6.8" r="1.3" fill="white"/>
+                </svg>
+                <span id="printInstagramVal" style="color:#818cf8;font-weight:700"></span>
+              </a>
               <span id="printPixSpan" style="display:none">💠 PIX: <span id="printPixVal"></span></span>
             </div>
             <div style="font-size:11px;color:#475569;margin-top:3px">
@@ -1688,26 +1726,37 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         <div style="font-size:11px;color:#94a3b8;line-height:1.8">
           <span id="printCartoes" style="display:block"></span>
           Validade deste orçamento: <span id="printValidade" style="font-weight:700;color:#0f172a">15 dias</span>
+
+          <div id="printIgWrapper" style="display:none;margin-top:10px">
+            <div style="font-size:11px;color:#64748b;font-style:italic;margin-bottom:8px">Quer saber mais sobre nós? Clica e segue 👇</div>
+            <a id="printIgFooter" href="#" target="_blank" style="display:inline-block;text-decoration:none;border:2px solid #e0d7ff;border-radius:14px;padding:14px 18px;background:linear-gradient(135deg,rgba(124,77,255,.06),rgba(240,98,146,.06))">
+              <div style="display:flex;align-items:center;gap:12px">
+                <svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <radialGradient id="ig1" cx="30%" cy="107%" r="150%">
+                      <stop offset="0%" stop-color="#fdf497"/>
+                      <stop offset="5%" stop-color="#fdf497"/>
+                      <stop offset="45%" stop-color="#fd5949"/>
+                      <stop offset="60%" stop-color="#d6249f"/>
+                      <stop offset="90%" stop-color="#285AEB"/>
+                    </radialGradient>
+                  </defs>
+                  <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig1)"/>
+                  <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/>
+                  <circle cx="17.2" cy="6.8" r="1.3" fill="white"/>
+                </svg>
+                <div>
+                  <div id="printIgHandle" style="font-size:16px;font-weight:800;color:#1e293b;line-height:1.2"></div>
+                  <div id="printIgUrl" style="font-size:11px;color:#818cf8;font-weight:600;margin-top:2px"></div>
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
         <div style="font-size:11px;color:#94a3b8;text-align:right;line-height:1.8">
           Gerado via <strong style="color:#2563eb">⚡ Eletricista Power</strong>
           <div style="font-size:9px;color:#cbd5e1;margin-top:2px">Documento gerado eletronicamente</div>
         </div>
-      </div>
-
-      <div id="printIgWrapper" style="display:none;margin:16px -28px -28px">
-        <a id="printIgFooter" href="#" target="_blank" style="display:block;text-decoration:none;background:linear-gradient(135deg,#1e0a3c,#4a1060,#7c1f6e);padding:18px 28px">
-          <div style="font-size:12px;color:rgba(255,255,255,.6);font-weight:600;margin-bottom:8px;font-style:italic">Quer saber mais sobre nós? Clica e segue 👇</div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#f9a825,#f06292,#7c4dff);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2" fill="none"/><circle cx="17.2" cy="6.8" r="1.3" fill="white"/></svg>
-            </div>
-            <div>
-              <div id="printIgHandle" style="font-size:20px;font-weight:800;color:#fff;line-height:1.2"></div>
-              <div id="printIgUrl" style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px"></div>
-            </div>
-          </div>
-        </a>
       </div>
     </div>
   </div>
@@ -2094,6 +2143,8 @@ function formatMoneyInput(input) {
   v = (parseInt(v)/100).toFixed(2).replace('.',',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
   input.value = v;
 }
+
+const formatPriceInput = formatMoneyInput;
 
 function maskPhone(input) {
   let v = input.value.replace(/\D/g,'').substring(0,11);
@@ -3194,16 +3245,18 @@ function collectMaterials() {
 function computeTotals(totalServicos, mat) {
   const km = parseFloat(document.getElementById('distanciaKm')?.value) || 0;
   const horas = parseFloat(document.getElementById('tempoHoras')?.value) || 0;
+  const custoPecasExtra = parseCurrency(document.getElementById('custoPecas')?.value || '0');
   const custoLog = km * COST_PER_KM;
   const custoHoras = horas * (appState.custoHora || 0);
-  const subtotal = totalServicos + mat + custoLog + custoHoras;
+  const matTotal = mat + custoPecasExtra;
+  const subtotal = totalServicos + matTotal + custoLog + custoHoras;
   const descontoPerc = parseFloat(document.getElementById('descontoOrc')?.value) || 0;
   const acrescimo = parseCurrency(document.getElementById('acrescimoOrc')?.value || '0');
   const valorDesconto = subtotal * (descontoPerc / 100);
   const totalFinal = subtotal - valorDesconto + acrescimo;
   const percSinal = appState.sinalPercent || 30;
   const valorSinal = totalFinal * (percSinal / 100);
-  return {km, horas, custoLog, custoHoras, subtotal, descontoPerc, valorDesconto, acrescimo, totalFinal, percSinal, valorSinal, mat};
+  return {km, horas, custoLog, custoHoras, subtotal, descontoPerc, valorDesconto, acrescimo, totalFinal, percSinal, valorSinal, mat: matTotal, custoPecasExtra};
 }
 
 function displayResults(totais, totalServicos, mat) {
@@ -3566,7 +3619,7 @@ function resetForm() {
   document.getElementById('srv-empty').style.display = 'flex';
   document.getElementById('mat-empty').style.display = 'flex';
   updateServiceBadge(); updateMaterialBadge();
-  ['nomeCliente','enderecoCliente','telefoneCliente','detalhesServico','detalhesGeral','detalhesMateriais','distanciaKm','tempoHoras','descontoOrc','acrescimoOrc'].forEach(id => {
+  ['nomeCliente','enderecoCliente','telefoneCliente','detalhesServico','detalhesGeral','detalhesMateriais','distanciaKm','tempoHoras','descontoOrc','acrescimoOrc','custoPecas'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -3939,11 +3992,6 @@ function importBackup(input) {
   reader.readAsText(file);
 }
 
-function addCatalogItem(e, type, d) {
-  e.stopPropagation();
-  if (type === 'srv') addService(e, d);
-  else addMaterial(e, d);
-}
 
 function renderAccordion(containerId, catalog, cats, type) {
   const container = document.getElementById(containerId);
@@ -4062,43 +4110,6 @@ function editCatalogName(el, item, type, containerId, catalog, cats) {
   });
 }
 
-function buildCatalogAddRow(cat, type, containerId, catalog, cats) {
-  const row = document.createElement('div');
-  row.className = 'acc-add-row';
-  const nameInp = document.createElement('input');
-  nameInp.className = 'acc-add-input';
-  nameInp.placeholder = type === 'srv' ? '+ Nome do serviço' : '+ Nome do material';
-  const valInp = document.createElement('input');
-  valInp.className = 'acc-val-input';
-  valInp.type = 'number';
-  valInp.placeholder = 'R$';
-  valInp.min = '0';
-  const btn = document.createElement('button');
-  btn.className = 'acc-add-btn';
-  btn.textContent = '+';
-  btn.title = 'Adicionar à categoria ' + cat.name;
-  btn.addEventListener('click', () => {
-    const n = nameInp.value.trim();
-    const v = parseFloat(valInp.value);
-    if (!n) { showToast('⚠️ Digite o nome'); nameInp.focus(); return; }
-    if (!v || v <= 0) { showToast('⚠️ Digite um valor'); valInp.focus(); return; }
-    const newItem = type === 'srv'
-      ? {n, v, cat:cat.k, icon:'⚡', _id:'custom_'+Date.now()}
-      : {n, p:v, t:'', cat:cat.k, icon:'⚡', _id:'custom_'+Date.now()};
-    catalog.push(newItem);
-    customItems.add(newItem._id);
-    nameInp.value = '';
-    valInp.value = '';
-    openCats.add(type + '-' + cat.k);
-    renderAccordion(containerId, catalog, cats, type);
-    showToast('✅ Adicionado: ' + n);
-  });
-  [nameInp, valInp].forEach(inp => inp.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); }));
-  row.appendChild(nameInp);
-  row.appendChild(valInp);
-  row.appendChild(btn);
-  return row;
-}
 
 function editCatalogValue(el, item, priceKey, type, containerId, catalog, cats) {
   const currentVal = item[priceKey];
