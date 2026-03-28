@@ -992,7 +992,65 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 
 <main class="app-body">
 
-<div id="screen-input" class="screen active">
+<div id="screen-home" class="screen active">
+  <div style="padding:4px 0 8px">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.08em">Bem-vindo de volta</div>
+        <div id="home-saudacao" style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--txt);margin-top:2px">Olá! 👋</div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:2px" id="home-data"></div>
+      </div>
+      <div style="width:44px;height:44px;background:var(--accent-g);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">⚡</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:4px">💰 Faturamento</div>
+        <div id="home-faturamento" style="font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--c-mat)">R$ 0,00</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:2px" id="home-mes-label">este mês</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:4px">📋 Orçamentos</div>
+        <div id="home-orcamentos" style="font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--accent)">0</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:2px">este mês</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:4px">👥 Clientes</div>
+        <div id="home-clientes" style="font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--c-cost)">0</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:2px">cadastrados</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:4px">🛡️ Garantias</div>
+        <div id="home-garantias" style="font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--accent2)">0</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:2px">a vencer</div>
+      </div>
+    </div>
+
+    <button onclick="switchMainTab('orcamento')" style="width:100%;padding:16px;background:var(--accent2-g);color:#fff;font-family:var(--font-display);font-size:15px;font-weight:800;border:none;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.04em;box-shadow:0 6px 24px rgba(249,115,22,.35);margin-bottom:12px">
+      ⚡ CRIAR NOVO ORÇAMENTO
+    </button>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)">
+        <div style="font-family:var(--font-display);font-size:11px;font-weight:800;color:var(--txt);text-transform:uppercase;letter-spacing:.06em">📋 Último Orçamento</div>
+        <button onclick="switchMainTab('historico')" style="font-size:10px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--font-display)">Ver todos →</button>
+      </div>
+      <div id="home-ultimo-orc" style="padding:14px;font-size:12px;color:var(--txt3);text-align:center;font-style:italic">Nenhum orçamento ainda</div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)">
+        <div style="font-family:var(--font-display);font-size:11px;font-weight:800;color:var(--txt);text-transform:uppercase;letter-spacing:.06em">📅 Próximos Agendamentos</div>
+        <button onclick="switchMainTab('agenda')" style="font-size:10px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--font-display)">Ver todos →</button>
+      </div>
+      <div id="home-agendamentos" style="padding:14px;font-size:12px;color:var(--txt3);text-align:center;font-style:italic">Nenhum agendamento próximo</div>
+    </div>
+
+  </div>
+</div>
+
+<div id="screen-input" class="screen">
   <div class="card">
     <div class="card-accent-bar"></div>
     <div style="padding-left:8px">
@@ -1385,8 +1443,12 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 
 </main>
 
-<nav class="bottom-nav">
-  <button class="bottom-nav-btn active" id="bnav-orcamento" onclick="switchMainTab('orcamento')">
+<nav class="bottom-nav" style="grid-template-columns:1fr 1fr 1fr 1fr">
+  <button class="bottom-nav-btn active" id="bnav-home" onclick="switchMainTab('home')">
+    <span style="font-size:18px">🏠</span>
+    <span>Início</span>
+  </button>
+  <button class="bottom-nav-btn" id="bnav-orcamento" onclick="switchMainTab('orcamento')">
     <span style="font-size:18px">⚡</span>
     <span>Orçamento</span>
   </button>
@@ -3579,22 +3641,48 @@ async function sharePDF() {
     jsPDF: {unit:'mm', format:'a4', orientation:'portrait'}
   };
 
-  // URL do Instagram para anotação de link no PDF (usa igHandle já calculado acima)
   const igUrl = igHandle ? 'https://instagram.com/' + igHandle : '';
 
+  // Mede posição real dos elementos no DOM e converte para coordenadas mm do PDF
+  // margin=12mm, A4=210x297mm, área útil=186mm de largura
+  function elToMm(elId) {
+    const elem = document.getElementById(elId);
+    const container = document.getElementById('printable-area');
+    if (!elem || !container) return null;
+    const er = elem.getBoundingClientRect();
+    const cr = container.getBoundingClientRect();
+    const pxToMm = 25.4 / 96; // 96dpi padrão
+    const scaleX = 186 / (cr.width || 1); // área útil / largura do container
+    const x = 12 + (er.left - cr.left) * pxToMm * (186 / (cr.width * pxToMm));
+    const y = 12 + (er.top  - cr.top)  * pxToMm * (297 / (cr.height * pxToMm || 297));
+    const w = er.width  * pxToMm * (186 / (cr.width * pxToMm));
+    const h = er.height * pxToMm * (297 / (cr.height * pxToMm || 297));
+    return {x, y, w, h};
+  }
+
+  const igHeaderRect = igUrl ? elToMm('printInstagramSpan') : null;
+  const igFooterRect = igUrl ? elToMm('printIgWrapper')     : null;
+
   try {
-    // Pipeline que expõe o jsPDF para adicionar anotações de link
     let worker = html2pdf().set(opt).from(el).toPdf();
 
-    // Adiciona link clicável sobre o botão do Instagram no PDF (aguarda antes de gerar blob)
     if (igUrl) {
       worker = worker.get('pdf').then(pdf => {
         const pageH = pdf.internal.pageSize.getHeight();
         const pageW = pdf.internal.pageSize.getWidth();
-        // Link no cabeçalho — cobre o pill com @handle (área generosa)
-        pdf.link(12, 18, 110, 10, { url: igUrl });
-        // Link no rodapé — cobre o banner inteiro (largura total, altura do banner)
-        pdf.link(12, pageH - 52, pageW - 24, 28, { url: igUrl });
+        const margin = 12;
+        // Cabeçalho — pill do Instagram
+        if (igHeaderRect) {
+          pdf.link(igHeaderRect.x, igHeaderRect.y, igHeaderRect.w + 10, Math.max(igHeaderRect.h, 8), { url: igUrl });
+        } else {
+          pdf.link(margin, 20, 90, 9, { url: igUrl });
+        }
+        // Rodapé — banner inteiro (largura total menos margens)
+        if (igFooterRect) {
+          pdf.link(margin, igFooterRect.y, pageW - margin * 2, igFooterRect.h + 4, { url: igUrl });
+        } else {
+          pdf.link(margin, pageH - 55, pageW - margin * 2, 32, { url: igUrl });
+        }
         return pdf;
       });
     }
@@ -3641,16 +3729,22 @@ function fallbackCopy(text, cb) {
 }
 
 function showScreen(id) {
-  ['screen-input','screen-results','screen-agenda','screen-historico'].forEach(sid => {
+  ['screen-home','screen-input','screen-results','screen-agenda','screen-historico'].forEach(sid => {
     document.getElementById(sid)?.classList.remove('active');
   });
   document.getElementById(id)?.classList.add('active');
   window.scrollTo({top:0, behavior:'smooth'});
   // Sync bottom nav
-  if (id === 'screen-input' || id === 'screen-results') {
+  const allBtns = ['bnav-home','bnav-orcamento','bnav-agenda','bnav-historico'];
+  allBtns.forEach(b => { const el = document.getElementById(b); if(el) el.className = 'bottom-nav-btn'; });
+  if (id === 'screen-home') {
+    document.getElementById('bnav-home').className = 'bottom-nav-btn active';
+  } else if (id === 'screen-input' || id === 'screen-results') {
     document.getElementById('bnav-orcamento').className = 'bottom-nav-btn active';
-    document.getElementById('bnav-agenda').className = 'bottom-nav-btn';
-    document.getElementById('bnav-historico').className = 'bottom-nav-btn';
+  } else if (id === 'screen-agenda') {
+    document.getElementById('bnav-agenda').className = 'bottom-nav-btn active-agenda';
+  } else if (id === 'screen-historico') {
+    document.getElementById('bnav-historico').className = 'bottom-nav-btn active-historico';
   }
 }
 
@@ -4293,17 +4387,105 @@ function showCatAutosave(type) {
   setTimeout(() => { el.style.display = 'none'; }, 2100);
 }
 
+function renderHomeScreen() {
+  const agora = new Date();
+  const mes = agora.getMonth();
+  const ano = agora.getFullYear();
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  // Saudação com nome do prestador
+  const nome = (appState.prestadorPadrao || '').split(' ')[0];
+  const hora = agora.getHours();
+  const periodo = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
+  const saudEl = document.getElementById('home-saudacao');
+  if (saudEl) saudEl.textContent = nome ? `${periodo}, ${nome}! 👋` : `${periodo}! 👋`;
+
+  // Data atual
+  const dataEl = document.getElementById('home-data');
+  if (dataEl) dataEl.textContent = agora.toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long'});
+
+  // Métricas do mês
+  const hist = appState.historico || [];
+  const doMes = hist.filter(h => {
+    const p = (h.data||'').split('/');
+    return p.length >= 3 && parseInt(p[1],10)-1 === mes && parseInt(p[2],10) === ano;
+  });
+  const fat = doMes.reduce((s,h) => s+(h.total||0), 0);
+  const el = id => document.getElementById(id);
+  if (el('home-faturamento')) el('home-faturamento').textContent = formatBRL(fat);
+  if (el('home-orcamentos')) el('home-orcamentos').textContent = doMes.length;
+  if (el('home-clientes')) el('home-clientes').textContent = (appState.clientes||[]).length;
+  if (el('home-mes-label')) el('home-mes-label').textContent = meses[mes];
+
+  // Garantias a vencer (próximos 30 dias)
+  const vencendo = hist.filter(h => {
+    const w = computeWarrantyStatus(h);
+    return w && w.daysLeft > 0 && w.daysLeft <= 30;
+  }).length;
+  if (el('home-garantias')) {
+    el('home-garantias').textContent = vencendo;
+    el('home-garantias').style.color = vencendo > 0 ? '#fb923c' : 'var(--accent2)';
+  }
+
+  // Último orçamento
+  const uo = el('home-ultimo-orc');
+  if (uo) {
+    if (!hist.length) {
+      uo.innerHTML = '<div style="padding:14px;font-size:12px;color:var(--txt3);text-align:center;font-style:italic">Nenhum orçamento ainda</div>';
+    } else {
+      const last = hist[0];
+      uo.innerHTML = `<div style="padding:12px 14px;cursor:pointer" onclick="switchMainTab('historico')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;font-weight:700;color:var(--txt)">${last.cliente}</div>
+          <div style="font-family:var(--font-display);font-size:13px;font-weight:800;color:var(--c-srv)">${formatBRL(last.total||0)}</div>
+        </div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:3px">${last.data}${last.tipo?' · '+last.tipo:''}</div>
+      </div>`;
+    }
+  }
+
+  // Próximos agendamentos
+  const agEl = el('home-agendamentos');
+  if (agEl) {
+    const hoje = new Date(); hoje.setHours(0,0,0,0);
+    const visitas = (appState.visitas||[])
+      .filter(v => { try { return new Date(v.data+'T00:00:00') >= hoje; } catch(e){ return false; } })
+      .sort((a,b) => new Date(a.data) - new Date(b.data))
+      .slice(0,3);
+    if (!visitas.length) {
+      agEl.innerHTML = '<div style="padding:14px;font-size:12px;color:var(--txt3);text-align:center;font-style:italic">Nenhum agendamento próximo</div>';
+    } else {
+      agEl.innerHTML = visitas.map(v => {
+        const dt = new Date(v.data+'T00:00:00');
+        const diff = Math.round((dt - hoje)/(86400000));
+        const badge = diff === 0 ? '<span style="font-size:9px;font-weight:700;color:#4ade80;background:rgba(34,197,94,.12);padding:2px 7px;border-radius:99px">HOJE</span>'
+          : diff === 1 ? '<span style="font-size:9px;font-weight:700;color:#fb923c;background:rgba(249,115,22,.1);padding:2px 7px;border-radius:99px">AMANHÃ</span>'
+          : `<span style="font-size:9px;font-weight:700;color:var(--txt3);background:var(--border);padding:2px 7px;border-radius:99px">${diff}d</span>`;
+        return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--txt)">${v.cliente||'—'}</div>
+            <div style="font-size:10px;color:var(--txt3)">${v.hora||''} · ${v.tipo||'Visita'}</div>
+          </div>
+          ${badge}
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
 function switchMainTab(tab) {
-  const screens = { orcamento: 'screen-input', agenda: 'screen-agenda', historico: 'screen-historico' };
-  const screenId = screens[tab] || 'screen-input';
-  ['screen-input','screen-results','screen-agenda','screen-historico'].forEach(sid => {
+  const screens = { home: 'screen-home', orcamento: 'screen-input', agenda: 'screen-agenda', historico: 'screen-historico' };
+  const screenId = screens[tab] || 'screen-home';
+  ['screen-home','screen-input','screen-results','screen-agenda','screen-historico'].forEach(sid => {
     document.getElementById(sid)?.classList.remove('active');
   });
   document.getElementById(screenId)?.classList.add('active');
   window.scrollTo({top:0, behavior:'smooth'});
+  document.getElementById('bnav-home').className      = 'bottom-nav-btn' + (tab === 'home'      ? ' active' : '');
   document.getElementById('bnav-orcamento').className = 'bottom-nav-btn' + (tab === 'orcamento' ? ' active' : '');
   document.getElementById('bnav-agenda').className    = 'bottom-nav-btn' + (tab === 'agenda'    ? ' active-agenda' : '');
   document.getElementById('bnav-historico').className = 'bottom-nav-btn' + (tab === 'historico' ? ' active-historico' : '');
+  if (tab === 'home') { renderHomeScreen(); }
   if (tab === 'agenda') { agListarVisitas(); agListarClientes(); }
   if (tab === 'historico') { renderHistory(); checkWarrantyAlerts(); }
 }
@@ -4684,6 +4866,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const mesEl = document.getElementById('ag-rel-mes');
   if (mesEl) mesEl.value = new Date().getMonth();
   initLogoBgs();
+  renderHomeScreen();
 });
 
 function requestWarrantyNotifications() {
