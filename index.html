@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const link = document.getElementById('pwa-manifest');
   if (link) link.href = url;
 
-  
+
   try {
     const canvas = document.createElement('canvas');
     canvas.width = 512; canvas.height = 512;
@@ -58,8 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
   } catch(e) {}
 });
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts loaded via JS after DOM ready for PDF compatibility -->
+  <style id="font-face-pdf">
+    @font-face { font-family: 'Syne'; font-weight: 400 600 700 800; src: local('Syne'); }
+    @font-face { font-family: 'Inter'; font-weight: 400 500 600 700 800; src: local('Inter'), local('Arial'); }
+  </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -337,58 +340,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 }
 .btn-secondary:hover { background: var(--surface2); }
 .btn-accent { width: 100%; padding: 12px; background: var(--accent-g); color: #fff; font-size: 11px; }
-.btn-dashed {
-  width: 100%;
-  padding: 13px;
-  background: transparent;
-  border: 2px dashed var(--border2);
-  color: var(--txt3);
-  font-size: 11px;
-  border-radius: var(--radius);
-}
-.btn-dashed:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.04); }
-.service-row {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px;
-  margin-bottom: 10px;
-  position: relative;
-  animation: slideUp .3s ease;
-  box-shadow: var(--shadow);
-  transition: background .3s, border-color .3s;
-}
-.result-hero {
-  background: var(--header-bg);
-  border-radius: var(--radius);
-  padding: 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-  margin-bottom: 12px;
-}
-.result-hero::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 140px; height: 140px;
-  background: radial-gradient(circle, rgba(59,130,246,.2), transparent 70%);
-}
-.result-hero-label { font-family: var(--font-display); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--accent); margin-bottom: 8px; }
-.result-hero-value { font-family: var(--font-display); font-size: clamp(36px, 10vw, 48px); font-weight: 800; color: #f1f5f9; letter-spacing: -.02em; line-height: 1; margin-bottom: 20px; }
-.result-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
-.result-mini { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.05); border-radius: 12px; padding: 10px 12px; }
-.result-mini-label { font-size: 8px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 3px; }
-.result-mini-val { font-size: 14px; font-weight: 700; }
-.result-mini-val.green { color: #4ade80; }
-.result-mini-val.red { color: #f87171; }
-.result-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 8px; text-align: center; box-shadow: var(--shadow); transition: background .3s; }
-.stat-card-icon { font-size: 16px; margin-bottom: 4px; }
-.stat-card-label { font-size: 8px; font-weight: 700; text-transform: uppercase; color: var(--txt3); margin-bottom: 2px; }
-.stat-card-val { font-family: var(--font-display); font-size: 12px; font-weight: 800; color: var(--txt); }
+
 .accordion { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 8px; box-shadow: var(--shadow); transition: background .3s; }
 .accordion-trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--surface2); border: none; cursor: pointer; color: var(--txt); transition: background .2s; }
 .accordion-trigger:hover { background: var(--surface); }
@@ -461,8 +413,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .modal-close:hover { background: var(--border); }
 .modal-body { padding: 16px 18px 20px; }
 
-.history-overlay.open 
-
 .history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; transition: border-color .2s, background .3s; }
 .history-item:hover { border-color: var(--accent); }
 .history-item-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
@@ -507,7 +457,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
   border: 1px solid rgba(59,130,246,.3);
 }
 .affiliate-btn:active { transform: scale(.98); }
-.section-divider { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--txt3); text-align: center; padding: 8px 0; margin: 8px 0; }
+
 .loader { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 #toast {
@@ -531,38 +481,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 #toast.show { transform: translateX(-50%) translateY(0); }
 .alert-dot { position: absolute; top: -3px; right: -3px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; border: 2px solid var(--header-bg); display: none; }
 .alert-dot.show { display: block; }
-.chips-row { display: flex; gap: 4px; padding: 6px 14px 5px; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; border-bottom: 1px solid var(--border); }
-.chips-row::-webkit-scrollbar { display: none; }
-.chip { padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: all .2s; border: 1.5px solid transparent; user-select: none; }
-.chip.on { box-shadow: 0 0 0 2px currentColor; transform: scale(1.04); }
-.cs-all, .cm-all { background: rgba(100,116,139,.1); color: #64748b; border-color: rgba(100,116,139,.2); }
-.cs-res { background: rgba(34,197,94,.08); color: #16a34a; border-color: rgba(34,197,94,.2); }
-.cs-com { background: rgba(6,182,212,.08); color: #0891b2; border-color: rgba(6,182,212,.2); }
-.cs-ind { background: rgba(168,85,247,.08); color: #9333ea; border-color: rgba(168,85,247,.2); }
-.cs-ate { background: rgba(239,68,68,.08); color: #dc2626; border-color: rgba(239,68,68,.2); }
-.cs-ar { background: rgba(59,130,246,.1); color: var(--accent); border-color: rgba(59,130,246,.2); }
-.cs-man { background: rgba(234,179,8,.08); color: #ca8a04; border-color: rgba(234,179,8,.2); }
-.cs-inf { background: rgba(249,115,22,.08); color: #ea580c; border-color: rgba(249,115,22,.2); }
-.cs-seg { background: rgba(239,68,68,.06); color: #ef4444; border-color: rgba(239,68,68,.15); }
-.cm-cond { background: rgba(249,115,22,.08); color: #ea580c; border-color: rgba(249,115,22,.2); }
-.cm-prot { background: rgba(34,197,94,.08); color: #16a34a; border-color: rgba(34,197,94,.2); }
-.cm-elet { background: rgba(168,85,247,.08); color: #9333ea; border-color: rgba(168,85,247,.2); }
-.cm-cxq { background: rgba(234,179,8,.08); color: #ca8a04; border-color: rgba(234,179,8,.2); }
-.cm-disp { background: rgba(6,182,212,.08); color: #0891b2; border-color: rgba(6,182,212,.2); }
-.cm-ilu { background: rgba(253,224,71,.1); color: #a16207; border-color: rgba(253,224,71,.3); }
-.cm-ate { background: rgba(239,68,68,.08); color: #dc2626; border-color: rgba(239,68,68,.2); }
-.cm-fix { background: rgba(59,130,246,.08); color: var(--accent); border-color: rgba(59,130,246,.2); }
-.category-panel { overflow: hidden; max-height: 0; transition: max-height .35s cubic-bezier(.4,0,.2,1); }
-.category-panel.open { max-height: 9999px; }
-.panel-inner { background: var(--surface2); border-bottom: 1px solid var(--border); }
-.panel-header { padding: 8px 14px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
-.panel-header-icon { font-size: 14px; }
-.panel-header-name { font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--txt2); flex: 1; }
-.panel-header-count { font-size: 11px; font-weight: 700; background: var(--border); color: var(--txt2); padding: 2px 8px; border-radius: 99px; }
-.panel-close-btn { font-size: 14px; color: var(--txt3); cursor: pointer; background: none; border: none; padding: 0 2px; line-height: 1; transition: color .15s; }
-.panel-close-btn:hover { color: var(--accent2); }
-.panel-search { position: relative; padding: 6px 10px; background: var(--surface2); border-bottom: 1px solid var(--border); }
-.panel-search-icon { position: absolute; left: 17px; top: 50%; transform: translateY(-50%); font-size: 12px; pointer-events: none; color: var(--txt3); }
+
 .panel-search-input {
   width: 100%;
   padding: 8px 10px 8px 32px;
@@ -593,7 +512,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .pi-add-orange { background: rgba(249,115,22,.12); color: var(--accent2); }
 .pi-add:hover { transform: scale(1.15); }
 .pi-add:active { transform: scale(.88); }
-.panel-empty { padding: 16px; text-align: center; font-size: 13px; color: var(--txt3); font-weight: 600; }
+
 .inline-results {
   position: absolute;
   left: 14px; right: 14px;
@@ -625,16 +544,9 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 }
 .srv-row:last-child { border-bottom: none; }
 .srv-row:hover { background: rgba(37,99,235,.07); }
-/* ── Material Accordíon ── */
+
 .mat-row { background: var(--surface2); border-bottom: 1px solid var(--border); animation: rowIn .22s ease; }
 .mat-row:last-child { border-bottom: none; }
-.mat-top {
-  padding: 8px 10px 8px 14px;
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer;
-  user-select: none;
-  transition: background .15s;
-}
 .mat-top:hover { background: rgba(249,115,22,.06); }
 .mat-accordion {
   display: none;
@@ -706,7 +618,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .delete-btn { font-size: 18px; color: #fca5a5; cursor: pointer; background: none; border: none; padding: 0 2px; line-height: 1; flex-shrink: 0; transition: color .15s; }
 .delete-btn:hover { color: #ef4444; }
 
-/* ── Chip + customizável ── */
 .chip-add {
   padding: 4px 10px;
   border-radius: 99px;
@@ -748,7 +659,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
   font-family: var(--font-body);
 }
 
-/* ── Cards pendentes ── */
 .pending-card {
   display: none;
   margin: 0 14px 8px;
@@ -762,7 +672,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 }
 .pending-card.show { display: flex; }
 
-/* ── Botões de configurar/deletar nos cards ── */
 .btn-cfg-srv {
   padding: 5px 10px;
   background: rgba(249,115,22,.1);
@@ -800,7 +709,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
   justify-content: center;
   flex-shrink: 0;
 }
-/* ── Botão ⚙ na srv-row ── */
+
 .btn-recfg {
   font-size: 13px;
   background: rgba(249,115,22,.08);
@@ -815,7 +724,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 }
 .btn-recfg:hover { background: rgba(249,115,22,.18); }
 
-/* ── Botão adicionar item do catálogo ao orçamento ── */
 .acc-item-add {
   width: 26px; height: 26px;
   border-radius: 7px;
@@ -839,7 +747,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
   margin: 0 0 8px;
   transition: all .3s;
 }
-.fab-container { position: sticky; bottom: 0; padding: 8px 0 12px; background: linear-gradient(0deg, var(--bg) 55%, transparent); z-index: 20; }
+
 .fab-calculate {
   width: 100%;
   padding: 16px;
@@ -888,13 +796,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .toggle-switch.on { background: var(--accent); }
 .toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .25s; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
 .toggle-switch.on .toggle-thumb { transform: translateX(20px); }
-.srv-base-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); transition: background .15s; }
-.srv-base-row:hover { background: var(--surface2); }
-.srv-base-row:last-child { border: none; }
-.srv-base-name { flex: 1; font-size: 13px; font-weight: 700; color: var(--txt); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.srv-base-val { font-size: 12px; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
-.srv-base-del { font-size: 16px; color: var(--txt3); background: none; border: none; cursor: pointer; padding: 0 2px; line-height: 1; transition: color .15s; flex-shrink: 0; }
-.srv-base-del:hover { color: #ef4444; }
+
 .acc-cat { border-bottom: 1px solid var(--border); }
 .acc-cat:last-child { border: none; }
 .acc-hdr { display: flex; align-items: center; gap: 10px; padding: 13px 16px; cursor: pointer; user-select: none; transition: background .15s; -webkit-tap-highlight-color: transparent; }
@@ -932,14 +834,14 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .stat-pill { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; text-align: center; }
 .stat-num { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--txt); }
 .stat-lbl { font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--txt3); margin-top: 2px; }
-/* ── Catalog sub-tabs ── */
+
 .cat-subtabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 2px solid var(--border); margin-top: 10px; position: sticky; top: 0; z-index: 5; }
 .cat-subtab-btn { padding: 11px 8px; font-family: var(--font-display); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--txt3); background: none; border: none; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color .2s, border-color .2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
 .cat-subtab-btn.active-srv { color: #f97316; border-bottom-color: #f97316; }
 .cat-subtab-btn.active-mat { color: #22c55e; border-bottom-color: #22c55e; }
 .cat-panel { display: none; }
 .cat-panel.active { display: block; }
-/* ── Quick-add bar ── */
+
 .cat-quick-add { display: flex; align-items: center; gap: 5px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 6px 8px; }
 .cat-quick-add.mat { border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.04); }
 .cat-quick-select { background: var(--bg); border: 1.5px solid var(--border); border-radius: 7px; font-size: 11px; font-weight: 700; color: var(--txt2); padding: 5px 3px; outline: none; cursor: pointer; font-family: var(--font-body); max-width: 88px; flex-shrink: 0; }
@@ -952,7 +854,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .cat-quick-btn:active { transform: scale(.88); }
 .cat-autosave { font-size: 10px; color: var(--green,#22c55e); font-weight: 700; padding: 4px 14px 2px; display: none; }
 @keyframes catFade { 0%{opacity:0} 10%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
-.divider { height: 6px; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
 .bloco-tipo .input-field:focus { border-color: var(--c-tipo) !important; box-shadow: 0 0 0 3px rgba(37,99,235,.13) !important; }
 .bloco-tipo .input-label { color: var(--c-tipo) !important; }
 .bloco-tipo select.input-field { border-color: rgba(37,99,235,.3); }
@@ -970,13 +872,13 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .bloco-cost .input-field:focus { border-color: var(--c-cost) !important; box-shadow: 0 0 0 3px rgba(168,85,247,.13) !important; }
 .bloco-cost .input-label { color: var(--c-cost) !important; }
 .bloco-cost .prefix { color: var(--c-cost) !important; }
-/* ── Bottom nav ── */
+
 .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 440px; background: var(--surface); border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr 1fr; z-index: 40; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
 .bottom-nav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 8px 12px; font-family: var(--font-display); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--txt3); background: none; border: none; cursor: pointer; transition: color .2s; }
 .bottom-nav-btn.active { color: var(--accent); }
 .bottom-nav-btn.active-agenda { color: #f97316; }
 .bottom-nav-btn.active-historico { color: #a855f7; }
-/* ── Agenda ── */
+
 .ag-tabs { display: grid; grid-template-columns: repeat(4,1fr); background: var(--surface2); border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 5; }
 .ag-tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 9px 4px; font-family: var(--font-display); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--txt3); background: none; border: none; border-bottom: 2.5px solid transparent; margin-bottom: -2px; cursor: pointer; transition: color .2s, border-color .2s; }
 .ag-tab-icon { font-size: 15px; }
@@ -1019,14 +921,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .ag-rel-val { font-family: var(--font-display); font-size: 14px; font-weight: 800; color: #f1f5f9; }
 .ag-wa-btn { display:inline-flex;align-items:center;padding:4px 8px;background:rgba(34,197,94,.15);border-radius:8px;text-decoration:none;font-size:11px;color:#4ade80;font-weight:700;border:1px solid rgba(34,197,94,.25); }
 #printable-area { display: none; }
-/* ── Desconto ── */
-.discount-badge {
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
-  border-radius:8px;padding:3px 8px;
-  font-size:10px;font-weight:700;color:#16a34a;
-}
-/* ── Notif de garantia ── */
+
 .warranty-notif-btn {
   display:flex;align-items:center;gap:6px;
   background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);
@@ -1036,9 +931,9 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
   transition:background .2s;
 }
 .warranty-notif-btn:hover{background:rgba(249,115,22,.14);}
-/* ── Gráfico ── */
+
 #ag-grafico-anual canvas { max-height:160px; }
-/* ── Acréscimo input ── */
+
 .bloco-cost .input-field.has-suffix { padding-right:76px; }
 @media print {
   body * { visibility: hidden; }
@@ -1046,7 +941,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
   #printable-area { position: absolute; left: 0; top: 0; width: 100%; background: white; display: block !important; }
   @page { margin: 1cm; size: A4; }
 }
-/* ── Painel Configurador de Serviço ── */
+
 #srv-config-panel {
   display: none;
   margin: 0 14px 10px;
@@ -1258,7 +1153,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 
 <div id="screen-results" class="screen">
 
-  <!-- Card hero: total + lucro/despesas com logo de fundo -->
+
   <div style="position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:10px;overflow:hidden">
     <div id="res-logo-bg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0"></div>
     <div style="position:relative;z-index:1">
@@ -1277,7 +1172,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     </div>
   </div>
 
-  <!-- Card breakdown -->
+
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px 16px;margin-bottom:10px">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
       <span style="font-size:12px;color:var(--txt2)">🚗 Logística</span>
@@ -1301,7 +1196,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     </div>
   </div>
 
-  <!-- Botões -->
+
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
     <button id="btnPDF" onclick="sharePDF()" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:#f97316;border:none;border-radius:12px;color:#fff;cursor:pointer;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:4px">
       <span id="labelPDF">↗ PDF</span>
@@ -1311,7 +1206,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <button onclick="resetForm()" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--txt2);cursor:pointer;letter-spacing:.04em">↺ Novo</button>
   </div>
 
-  <!-- Mensagens prontas -->
+
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px">
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--txt3);padding:10px 14px;border-bottom:1px solid var(--border)">Mensagens Prontas</div>
     <div class="accordion" id="acc1" style="border-radius:0;border:none;margin:0">
@@ -1356,7 +1251,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 
 <div id="screen-agenda" class="screen">
 
-  
+
   <div class="ag-tabs">
     <button class="ag-tab active" id="agtab-visitas" onclick="agMudarAba('visitas')">
       <span class="ag-tab-icon">📅</span>Agenda
@@ -1372,7 +1267,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     </button>
   </div>
 
-  
+
   <div id="agpanel-visitas" class="ag-panel active">
     <div class="ag-panel-top">
       <span class="ag-panel-label">Agendamentos</span>
@@ -1399,7 +1294,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <div id="ag-lista-visitas"></div>
   </div>
 
-  
+
   <div id="agpanel-clientes" class="ag-panel">
     <div class="ag-panel-top">
       <span class="ag-panel-label">Base de clientes</span>
@@ -1421,7 +1316,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <div id="ag-lista-clientes"></div>
   </div>
 
-  
+
   <div id="agpanel-garantias" class="ag-panel">
     <div class="ag-panel-label" style="padding:0 0 10px">Garantias dos serviços</div>
     <button class="warranty-notif-btn" onclick="requestWarrantyNotifications();showToast('🔔 Notificações verificadas!')">
@@ -1430,7 +1325,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <div id="ag-lista-garantias"></div>
   </div>
 
-  
+
   <div id="agpanel-relatorio" class="ag-panel">
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
       <select id="ag-rel-mes" class="ag-input" style="flex:1">
@@ -1444,7 +1339,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
       <input type="number" id="ag-rel-ano" class="ag-input" style="width:88px" placeholder="Ano" oninput="agAtualizarGrafico()">
       <button class="ag-btn-blue" onclick="agCalcularRelatorio()" style="padding:10px 14px;flex-shrink:0">📊</button>
     </div>
-    
+
     <div id="ag-grafico-anual" style="display:none;margin-bottom:12px">
       <div class="ag-rel-hero" style="padding:14px">
         <div id="ag-grafico-titulo" class="ag-rel-titulo" style="margin-bottom:10px">Faturamento Anual</div>
@@ -1528,7 +1423,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <div id="tab-perfil" class="settings-tab-content active">
       <div class="settings-section">
         <div class="settings-section-title">🖼️ Logotipo</div>
-        
+
         <div id="logoPreviewArea" style="display:none;margin-bottom:12px;text-align:center">
           <div id="logoPreviewWrap" style="display:inline-block;position:relative">
             <img id="logoPreviewImg" style="width:90px;height:90px;object-fit:cover;border:2px solid var(--border)">
@@ -1557,6 +1452,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <div class="input-wrap"><span class="prefix" style="font-size:13px;font-weight:700">@</span><input type="text" id="configInstagram" class="input-field" placeholder="seueletricista" oninput="markSettingsDirty()"></div>
         </div>
         <div class="settings-field"><label class="settings-field-label">CPF / CNPJ</label><input type="text" id="configDocumento" class="input-field" placeholder="000.000.000-00" oninput="markSettingsDirty()"></div>
+        <div class="settings-field"><label class="settings-field-label">Cidade / Estado</label><input type="text" id="configCidade" class="input-field" placeholder="Ex: Recife - PE" oninput="markSettingsDirty()"></div>
       </div>
     </div>
 
@@ -1611,7 +1507,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     </div>
 
     <div id="tab-catalogo" class="settings-tab-content" style="padding:0">
-      
+
       <div style="padding:12px 14px 0">
         <div class="stats-bar" style="padding:0;margin-bottom:0">
           <div class="stat-pill"><div id="stat-srv" class="stat-num" style="color:var(--c-srv,var(--accent2))">—</div><div class="stat-lbl">Serviços</div></div>
@@ -1619,12 +1515,12 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <div class="stat-pill"><div id="stat-custom" class="stat-num" style="color:var(--green)">0</div><div class="stat-lbl">Personalizados</div></div>
         </div>
       </div>
-      
+
       <div class="cat-subtabs">
         <button id="cat-btn-srv" class="cat-subtab-btn active-srv" onclick="switchCatTab('srv')">🔧 Serviços</button>
         <button id="cat-btn-mat" class="cat-subtab-btn" onclick="switchCatTab('mat')">📦 Materiais</button>
       </div>
-      
+
       <div id="cat-panel-srv" class="cat-panel active">
         <div style="padding:10px 14px 6px;display:flex;flex-direction:column;gap:6px">
           <div class="input-wrap">
@@ -1641,7 +1537,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         <div id="cat-autosave-srv" class="cat-autosave">✓ Salvo automaticamente</div>
         <div id="srv-accordion" style="border-top:1px solid var(--border)"></div>
       </div>
-      
+
       <div id="cat-panel-mat" class="cat-panel">
         <div style="padding:10px 14px 6px;display:flex;flex-direction:column;gap:6px">
           <div class="input-wrap">
@@ -1698,7 +1594,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 <div id="printable-area">
   <div style="font-family:'Inter',sans-serif;color:#1e293b;max-width:760px;margin:0 auto;background:#fff">
 
-    
     <div id="printHeader" style="background:#0f172a;border-radius:16px 16px 0 0;padding:32px 28px 28px;position:relative;overflow:hidden;min-height:110px">
       <div id="printLogoBg" style="position:absolute;inset:0;background-size:contain;background-position:center;background-repeat:no-repeat;opacity:0.12;display:none"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,23,42,.95) 40%,rgba(37,99,235,.3));"></div>
@@ -1715,6 +1610,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
             </div>
             <div style="font-size:11px;color:#475569;margin-top:3px">
               <span id="printDocSpan" style="display:none"><span id="printDocVal"></span> · </span>Orçamento Profissional · <span id="printNumOrc" style="color:#3b82f6">Nº 0001</span>
+              <span id="printCidadeSpan" style="display:none"> · <span id="printCidadeVal" style="color:#64748b"></span></span>
             </div>
           </div>
         </div>
@@ -1726,14 +1622,13 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
       </div>
     </div>
 
-    
     <div style="height:20px;background:#0f172a;position:relative">
       <div style="position:absolute;bottom:0;left:0;right:0;height:20px;background:#fff;border-radius:16px 16px 0 0"></div>
     </div>
 
     <div style="padding:0 28px 28px">
 
-      
+
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
         <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px">
           <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:8px">👤 Cliente</div>
@@ -1748,7 +1643,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         </div>
       </div>
 
-      
+
       <div style="margin-bottom:20px">
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#0f172a;margin-bottom:8px;display:flex;align-items:center;gap:6px">🔧 Serviços Realizados</div>
         <table style="width:100%;border-collapse:collapse">
@@ -1764,7 +1659,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         </table>
       </div>
 
-      
+
       <div id="printMatSection" style="margin-bottom:20px;display:none">
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#0f172a;margin-bottom:8px">📦 Materiais Utilizados</div>
         <table style="width:100%;border-collapse:collapse">
@@ -1780,7 +1675,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         </table>
       </div>
 
-      
+
       <div style="display:flex;justify-content:flex-end;margin-bottom:24px">
         <div style="width:280px">
           <div id="printNotaMat" style="display:none;font-size:10px;color:#ea580c;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:8px;padding:7px 10px;margin-bottom:10px;line-height:1.5"></div>
@@ -1793,8 +1688,14 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <div id="printLogRow" style="display:none;justify-content:space-between;font-size:12px;color:#64748b;padding:6px 0;border-bottom:1px solid #f1f5f9">
             <span>Deslocamento:</span><span style="font-weight:700;color:#0f172a" id="printLogistica">R$ 0,00</span>
           </div>
+          <div id="printHorasRow" style="display:none;justify-content:space-between;font-size:12px;color:#64748b;padding:6px 0;border-bottom:1px solid #f1f5f9">
+            <span>Horas (<span id="printHorasQtd">0</span>h):</span><span style="font-weight:700;color:#0f172a" id="printHorasVal">R$ 0,00</span>
+          </div>
           <div id="printDiscRow" style="display:none;justify-content:space-between;font-size:12px;color:#16a34a;padding:6px 0;border-bottom:1px solid #f1f5f9">
             <span>Desconto (<span id="printDiscPct">0</span>%):</span><span style="font-weight:700;" id="printDiscVal">-R$ 0,00</span>
+          </div>
+          <div id="printAcrescimoRow" style="display:none;justify-content:space-between;font-size:12px;color:#f97316;padding:6px 0;border-bottom:1px solid #f1f5f9">
+            <span>Acréscimo:</span><span style="font-weight:700;color:#0f172a" id="printAcrescimoVal">R$ 0,00</span>
           </div>
           <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <div>
@@ -1806,7 +1707,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         </div>
       </div>
 
-      
+
       <div style="border-top:1px dashed #cbd5e1;padding-top:16px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
         <div style="font-size:11px;color:#94a3b8;line-height:1.8">
           <span id="printCartoes" style="display:block"></span>
@@ -2246,6 +2147,7 @@ function maskPhone(input) {
   if (v.length > 10) v = v.replace(/^(\d\d)(\d{5})(\d{4})/,'($1)$2-$3');
   else if (v.length > 5) v = v.replace(/^(\d\d)(\d{4})(\d{0,4})/,'($1)$2-$3');
   else if (v.length > 2) v = v.replace(/^(\d\d)(\d{0,5})/,'($1)$2');
+  else if (v.length === 2) v = '(' + v + ')';
   else v = v.replace(/^(\d*)/,'($1');
   input.value = v;
 }
@@ -2441,6 +2343,10 @@ function renderHistory() {
 function loadFromHistory(item) {
   if (!confirm('Carregar orçamento de ' + item.cliente + '?')) return;
   closeHistory();
+  // Resetar estado do toggle de material
+  _matClienteFornece = false;
+  const matTog = document.getElementById('mat-cliente-toggle');
+  if (matTog) matTog.classList.remove('on');
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
   set('nomeCliente', item.cliente);
   set('enderecoCliente', item.endereco);
@@ -2533,7 +2439,6 @@ function buildContextSelectors(ctx, tipo) {
   }
 }
 
-// ── Configurador de Serviços ──
 const MAT_PRECOS_CFG = {
   'tomada_10a':12,'tomada_20a':18,'tomada_dupla':22,'tomada_tripla':35,
   'cabo_15':3.5,'cabo_25':5,'cabo_4':8,'cabo_6':12,
@@ -2688,7 +2593,6 @@ let matPendente = null;  // item selecionado aguardando confirmação (material)
 
 function scpFmtBRL(v){return'R$ '+v.toFixed(2).replace('.',',');}
 
-// ── Chip + customizável ──
 function scpShowNewChip(wrapId) {
   const wrap = document.getElementById(wrapId);
   wrap.classList.toggle('show');
@@ -2713,7 +2617,6 @@ function scpConfirmNewChip(wrapId, chipsContainerId) {
   scpAtualizarPreview();
 }
 
-// ── Cards pendentes de serviço ──
 function selecionarPendente(d) {
   srvPendente = d;
   document.getElementById('srv-pending-icon').textContent = d.icon || '🔧';
@@ -2739,7 +2642,6 @@ function abrirConfiguradorPendente() {
   abrirConfigurador(d);
 }
 
-// ── Cards pendentes de material ──
 function selecionarMaterialPendente(d) {
   matPendente = d;
   document.getElementById('mat-pending-icon').textContent = d.icon || '📦';
@@ -2765,7 +2667,6 @@ function abrirConfiguradorMaterialPendente() {
   limparMaterialPendente();
 }
 
-// ── Reconfigurar serviço já adicionado ──
 function reabrirConfigurador(srvData, row) {
   abrirConfigurador(srvData);
   // Após adicionar via configurador, remove a row antiga
@@ -2970,7 +2871,9 @@ function inlineSearch(type, q) {
       box.appendChild(lbl);
     }
     byCat[catKey].forEach(d => {
-      const hl = d.n.replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')','gi'), '<em class="'+em+'">$1</em>');
+      const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      const safeName = d.n.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const hl = safeName.replace(new RegExp('(' + safeQ.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')','gi'), '<em class="'+em+'">$1</em>');
       const val = type === 'srv' ? 'R$ ' + d.v : (d.t==='fio'||d.t==='caboPP' ? 'R$ '+d.p+'/rolo' : 'R$ '+(typeof d.p==='number'?d.p.toFixed(2).replace('.',','):d.p));
       const ac = type === 'srv' ? 'pi-add pi-add-blue' : 'pi-add pi-add-orange';
       const row = document.createElement('div');
@@ -3056,7 +2959,7 @@ function addService(e, s, srvId) {
   const nomeBase = dotIdx > -1 ? (s.icon ? s.icon + ' ' : '') + s.n.slice(0, dotIdx) : fullName;
   const opcoes = dotIdx > -1 ? s.n.slice(dotIdx + 3).split(' · ').filter(Boolean) : [];
 
-  // Linha 1: nome + botões ⚙ ×
+
   const linha1 = document.createElement('div');
   linha1.style.cssText = 'display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px;';
 
@@ -3099,7 +3002,7 @@ function addService(e, s, srvId) {
   actWrap.appendChild(btnCfg); actWrap.appendChild(del);
   linha1.appendChild(nm); linha1.appendChild(actWrap);
 
-  // Linha 2: pills de opções (só se houver)
+
   let pillsRow = null;
   if (opcoes.length) {
     pillsRow = document.createElement('div');
@@ -3112,7 +3015,7 @@ function addService(e, s, srvId) {
     });
   }
 
-  // Linha 3: divisor + preço + qty
+
   const linha3 = document.createElement('div');
   linha3.style.cssText = 'display:flex;align-items:center;gap:8px;border-top:0.5px solid var(--border);padding:7px 0 9px;margin-top:2px;';
 
@@ -3177,8 +3080,7 @@ function addMaterial(e, m, linkedSrvId, baseQty, baseUnitPrice) {
     row.dataset.baseUnitPrice = baseUnitPrice || 0;
   }
 
-  // ── HEADER (mat-top) ──
-  const top = document.createElement('div'); top.className = 'mat-top';
+    const top = document.createElement('div'); top.className = 'mat-top';
 
   const nameWrap = document.createElement('div');
   nameWrap.style.cssText = 'display:flex;align-items:center;flex:1;min-width:0;gap:4px;';
@@ -3212,10 +3114,9 @@ function addMaterial(e, m, linkedSrvId, baseQty, baseUnitPrice) {
   rightWrap.appendChild(chevron); rightWrap.appendChild(del);
   top.appendChild(nameWrap); top.appendChild(rightWrap);
 
-  // ── ACCORDÍON ──
-  const acc = document.createElement('div'); acc.className = 'mat-accordion';
+    const acc = document.createElement('div'); acc.className = 'mat-accordion';
 
-  // Seção 1: Preço e Quantidade
+
   const secPQ = document.createElement('div'); secPQ.className = 'mat-acc-section';
   const lblPQ = document.createElement('div'); lblPQ.className = 'mat-acc-label'; lblPQ.textContent = '💰 Preço unitário e quantidade';
   const botFields = document.createElement('div'); botFields.style.cssText = 'display:flex;align-items:center;gap:6px;';
@@ -3241,7 +3142,7 @@ function addMaterial(e, m, linkedSrvId, baseQty, baseUnitPrice) {
   botFields.appendChild(pw); botFields.appendChild(qw);
   secPQ.appendChild(lblPQ); secPQ.appendChild(botFields);
 
-  // Seção 2: Configurações (ctx selectors - já existia)
+
   const secCfg = document.createElement('div'); secCfg.className = 'mat-acc-section';
   const lblCfg = document.createElement('div'); lblCfg.className = 'mat-acc-label'; lblCfg.textContent = '⚙️ Configurações';
   const ctx = document.createElement('div'); ctx.className = 'mat-context'; ctx.style.cssText = 'padding:0;border:none;min-height:0;background:none;';
@@ -3254,7 +3155,7 @@ function addMaterial(e, m, linkedSrvId, baseQty, baseUnitPrice) {
   }
   secCfg.appendChild(lblCfg); secCfg.appendChild(ctx);
 
-  // Seção 3: Detalhes técnicos
+
   const secDet = document.createElement('div'); secDet.className = 'mat-acc-section';
   const lblDet = document.createElement('div'); lblDet.className = 'mat-acc-label'; lblDet.textContent = '🏷️ Detalhes técnicos';
   const detFields = document.createElement('div'); detFields.className = 'mat-acc-fields';
@@ -3286,14 +3187,21 @@ function addMaterial(e, m, linkedSrvId, baseQty, baseUnitPrice) {
 }
 
 function updateFloatingButton() {
-  let total = 0;
+  let totalSrv = 0;
   document.querySelectorAll('#srv-container .srv-row').forEach(r => {
     const p = parseCurrency(r.querySelector('.price-input')?.value || '0');
     const q = parseInt(r.querySelector('.qty-val')?.value || 1);
-    total += p * q;
+    totalSrv += p * q;
+  });
+  let totalMat = 0;
+  document.querySelectorAll('#mat-container .mat-row').forEach(r => {
+    const p = parseCurrency(r.querySelector('.price-input')?.value || '0');
+    const q = parseInt(r.querySelector('.qty-val')?.value || 1);
+    totalMat += p * q;
   });
   const descontoPerc = parseFloat(document.getElementById('descontoOrc')?.value) || 0;
   const acrescimo = parseCurrency(document.getElementById('acrescimoOrc')?.value || '0');
+  let total = totalSrv + totalMat;
   if (descontoPerc > 0) total = total * (1 - descontoPerc/100);
   total += acrescimo;
   const fab = document.getElementById('fab-calcular');
@@ -3301,7 +3209,7 @@ function updateFloatingButton() {
   const txt = document.getElementById('stxt');
   const sum = document.getElementById('ssum');
   const bar = document.getElementById('status-bar');
-  if (total > 0) {
+  if (totalSrv > 0) {
     fab.classList.add('visible');
     if (dot) { dot.style.background = 'var(--green)'; dot.style.boxShadow = '0 0 7px rgba(34,197,94,.5)'; }
     if (txt) { txt.style.color = 'var(--green)'; txt.textContent = descontoPerc > 0 ? '✂️ Desconto de ' + descontoPerc + '% aplicado' : 'Pronto para calcular'; }
@@ -3361,7 +3269,7 @@ function computeTotals(totalServicos, mat) {
   const totalFinal = subtotal - valorDesconto + acrescimo;
   const percSinal = appState.sinalPercent || 30;
   const valorSinal = totalFinal * (percSinal / 100);
-  return {km, horas, custoLog, custoHoras, subtotal, descontoPerc, valorDesconto, acrescimo, totalFinal, percSinal, valorSinal};
+  return {km, horas, custoLog, custoHoras, subtotal, descontoPerc, valorDesconto, acrescimo, totalFinal, percSinal, valorSinal, mat};
 }
 
 function displayResults(totais, totalServicos, mat) {
@@ -3370,7 +3278,7 @@ function displayResults(totais, totalServicos, mat) {
   if (el('displayMaoObra')) el('displayMaoObra').textContent = formatBRL(totalServicos);
   if (el('displayMateriais')) el('displayMateriais').textContent = formatBRL(mat);
   if (el('displayPrecoFinal')) el('displayPrecoFinal').textContent = formatBRL(totais.totalFinal);
-  if (el('displayLucroLiquido')) el('displayLucroLiquido').textContent = formatBRL(totalServicos - mat - totais.custoLog - totais.custoHoras);
+  if (el('displayLucroLiquido')) el('displayLucroLiquido').textContent = formatBRL(totais.totalFinal - totais.mat - totais.custoLog - totais.custoHoras);
   if (el('displayDespesas')) el('displayDespesas').textContent = formatBRL(mat + totais.custoLog + totais.custoHoras);
   const discRow = el('displayDescontoRow');
   if (discRow) {
@@ -3403,12 +3311,12 @@ function calculateQuote() {
     id: Date.now(),
     seq: appState.orcamentoSeq++,
     tipo, prestador, cliente, endereco, telefone,
-    detalhes: [detGeral, detalhes, detMat].filter(Boolean).join('|'),
+    detalhes: [detGeral, detalhes, detMat].filter(Boolean).join('\n'),
     data: dataFmt, dataRaw, hora,
     itens, itensMat,
     total: totais.totalFinal,
     totalServicos,
-    mat, custoLog: totais.custoLog,
+    mat, custoLog: totais.custoLog, horas: totais.horas, custoHoras: totais.custoHoras,
     descontoPerc: totais.descontoPerc,
     valorDesconto: totais.valorDesconto,
     acrescimo: totais.acrescimo,
@@ -3429,8 +3337,9 @@ function calculateQuote() {
 function generateMessages(d) {
   const lista = d.itens.map(i => `• ${i.qtd}x ${i.nome} — ${formatBRL(i.total)}`).join('\n');
   const endTxt = d.endereco ? `\n📍 *Local:* ${d.endereco}` : '';
+  const obsTxt = d.detalhes ? `\n*OBS:* ${d.detalhes}` : '';
   document.getElementById('txt_proposta').textContent =
-    `*ORÇAMENTO TÉCNICO — ELETRICISTA POWER*\n\nOlá ${d.cliente}! Segue o orçamento:\n\n*SERVIÇOS:*\n${lista}\n\n*OBS:* ${d.detalhes}${endTxt}\n\n*INVESTIMENTO TOTAL:* ${formatBRL(d.total)}\n(Material + Mão de Obra incluso)\n\n*Garantia:* ${d.garantiaStr}\n*Data Prevista:* ${d.data} às ${d.hora}h\n\nFico no aguardo.\n${d.prestador}`;
+    `*ORÇAMENTO TÉCNICO — ELETRICISTA POWER*\n\nOlá ${d.cliente}! Segue o orçamento:\n\n*SERVIÇOS:*\n${lista}${obsTxt}${endTxt}\n\n*INVESTIMENTO TOTAL:* ${formatBRL(d.total)}\n(Material + Mão de Obra incluso)\n\n*Garantia:* ${d.garantiaStr}\n*Data Prevista:* ${d.data} às ${d.hora}h\n\nFico no aguardo.\n${d.prestador}`;
   document.getElementById('txt_sinal').textContent =
     `Olá ${d.cliente}! 👋\n\nPara agendarmos dia *${d.data}* e comprarmos o material, precisamos de um sinal.\n\n*Sinal (${d.sinalPercent}%): ${formatBRL(d.sinal)}*\n\nChave PIX: ${appState.chavePix || '[SUA CHAVE PIX]'}\n\nPor favor, envie o comprovante. Obrigado! ✅`;
   document.getElementById('txt_final').textContent =
@@ -3447,23 +3356,37 @@ async function sharePDF() {
   set('printPrestador', d.prestador);
   set('printCliente', d.cliente);
   set('printTelefone', d.telefone ? '📱 ' + d.telefone : '');
-  set('printEndereco', d.endereco ? '📍 ' + d.endereco : '');
-  set('printDetalhes', [d.tipo, d.detalhes].filter(Boolean).join(' — '));
+  // Build client address including bairro if available from client record
+  const clientRecord = appState.clientes.find(c => c.nome === d.cliente);
+  const enderecoComBairro = [d.endereco, clientRecord?.bairro].filter(Boolean).join(' — ');
+  set('printEndereco', enderecoComBairro ? '📍 ' + enderecoComBairro : '');
+  const detalhesTxt = ([d.tipo, d.detalhes].filter(Boolean).join(' — ')).replace(/\|/g, '\n');
+  set('printDetalhes', detalhesTxt);
+  document.getElementById('printDetalhes').style.whiteSpace = 'pre-wrap';
   set('printData', d.data);
-  set('printHoraSpan', d.hora ? '🕐 ' + d.hora + 'h' : '');
-  set('printNumOrc', 'Nº ' + String(d.seq).padStart(4,'0'));
+  const printHoraSpanEl = document.getElementById('printHoraSpan');
+  if (printHoraSpanEl) {
+    if (d.hora) {
+      printHoraSpanEl.textContent = '🕐 ' + d.hora + 'h';
+      printHoraSpanEl.style.display = '';
+    } else {
+      printHoraSpanEl.textContent = '';
+      printHoraSpanEl.style.display = 'none';
+    }
+  }
+  set('printNumOrc', 'Nº ' + new Date().getFullYear() + '-' + String(d.seq).padStart(4,'0'));
   set('printGarantia', d.garantiaStr);
-  set('printTotal', formatBRL(d.total));
   set('printMaoObra', formatBRL(d.totalServicos || 0));
   set('printMateriais', formatBRL(d.mat));
   set('printLogistica', formatBRL(d.custoLog || 0));
 
-  // ── Toggle: cliente fornece material ──
   const semMat = _matClienteFornece;
   const totalPDF = semMat ? (d.total - (d.mat || 0)) : d.total;
   set('printTotal', formatBRL(totalPDF));
+
+  // Fix sinal using totalPDF
+  const sinal = totalPDF * (sinalPct / 100);
   // Nota no PDF se cliente fornece material
-  const notaMatEl = document.getElementById('printNotaMat');
   if (notaMatEl) {
     notaMatEl.style.display = semMat ? 'block' : 'none';
     notaMatEl.textContent = semMat ? '⚠️ Materiais por conta do cliente — valor acima refere-se somente à mão de obra.' : '';
@@ -3496,12 +3419,36 @@ async function sharePDF() {
   show('printPixSpan', !!pix);
   set('printDocVal', doc);
   show('printDocSpan', !!doc);
+  const cidade = appState.cidade || '';
+  set('printCidadeVal', cidade);
+  show('printCidadeSpan', !!cidade);
   set('printValidade', validade + ' dias');
   set('printCartoes', cartoes ? '💳 ' + cartoes : '');
   show('printCartoes', !!cartoes);
 
   if (d.custoLog > 0) document.getElementById('printLogRow').style.display = 'flex';
   else document.getElementById('printLogRow').style.display = 'none';
+
+  const horasRow = document.getElementById('printHorasRow');
+  if (horasRow) {
+    if (d.custoHoras > 0) {
+      horasRow.style.display = 'flex';
+      set('printHorasQtd', (d.horas || 0));
+      set('printHorasVal', formatBRL(d.custoHoras));
+    } else {
+      horasRow.style.display = 'none';
+    }
+  }
+
+  const acrescimoRow = document.getElementById('printAcrescimoRow');
+  if (acrescimoRow) {
+    if (d.acrescimo > 0) {
+      acrescimoRow.style.display = 'flex';
+      set('printAcrescimoVal', formatBRL(d.acrescimo));
+    } else {
+      acrescimoRow.style.display = 'none';
+    }
+  }
 
   // Mostrar/ocultar materiais conforme toggle
   const _ocultarMat = _matClienteFornece;
@@ -3519,7 +3466,6 @@ async function sharePDF() {
     }
   }
 
-  const sinal = d.total * (sinalPct / 100);
   const slEl = document.getElementById('printSinalLine');
   if (slEl && sinalPct > 0) {
     slEl.style.display = 'block';
@@ -3532,16 +3478,10 @@ async function sharePDF() {
   if (appState.logoBase64) {
     printLogo.src = appState.logoBase64;
     printLogo.style.display = 'block';
-    // Grade de logos pequenas no fundo do PDF
     if (printBg) {
       printBg.innerHTML = '';
-      printBg.style.cssText = 'position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:10px;align-items:center;justify-items:center;pointer-events:none;';
-      for (let i = 0; i < 64; i++) {
-        const img = document.createElement('img');
-        img.src = appState.logoBase64;
-        img.style.cssText = 'width:32px;height:32px;opacity:0.05;border-radius:6px;object-fit:contain;';
-        printBg.appendChild(img);
-      }
+      printBg.style.cssText = 'position:absolute;inset:0;background-image:url(' + CSS.escape(appState.logoBase64).replace(/^url\(['"]?|['"]?\)$/g,'') + ');background-size:40px 40px;background-repeat:repeat;opacity:0.05;pointer-events:none;display:block;';
+      printBg.style.backgroundImage = 'url(' + appState.logoBase64 + ')';
     }
   } else {
     printLogo.style.display = 'none';
@@ -3552,16 +3492,16 @@ async function sharePDF() {
   tbody.innerHTML = '';
   d.itens.forEach((i, idx) => {
     const tr = tbody.insertRow();
-    tr.style.cssText = 'border-bottom:1px solid #f1f5f9;background:' + (idx%2===0?'#fff':'#f8fafc');
+    tr.style.cssText = 'border-bottom:1px solid #e2e8f0;background:' + (idx%2===0?'#fff':'#f8fafc');
     const cells = [
-      {v: i.nome, a: 'left', pad: '9px 12px', fw: '600'},
+      {v: i.nome, a: 'left', pad: '9px 12px', fw: '600', wrap: true},
       {v: i.qtd, a: 'center', pad: '9px 8px'},
       {v: formatBRL(i.unitario), a: 'right', pad: '9px 8px', c: '#64748b'},
       {v: formatBRL(i.total), a: 'right', pad: '9px 12px', fw: '700', c: '#0f172a'},
     ];
     cells.forEach(c => {
       const td = tr.insertCell();
-      td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}`;
+      td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}${c.wrap?'word-break:break-word;max-width:200px;':'white-space:nowrap;'}`;
       td.textContent = c.v;
     });
   });
@@ -3573,16 +3513,16 @@ async function sharePDF() {
     matSection.style.display = 'block';
     d.itensMat.forEach((m, idx) => {
       const tr = matList.insertRow();
-      tr.style.cssText = 'border-bottom:1px solid #f1f5f9;background:' + (idx%2===0?'#fff':'#f8fafc');
+      tr.style.cssText = 'border-bottom:1px solid #e2e8f0;background:' + (idx%2===0?'#fff':'#f8fafc');
       const cells = [
-        {v: m.nome, a: 'left', pad: '9px 12px', fw: '600'},
+        {v: m.nome, a: 'left', pad: '9px 12px', fw: '600', wrap: true},
         {v: m.qtd, a: 'center', pad: '9px 8px'},
         {v: formatBRL(m.unitario), a: 'right', pad: '9px 8px', c: '#64748b'},
         {v: formatBRL(m.total), a: 'right', pad: '9px 12px', fw: '700', c: '#0f172a'},
       ];
       cells.forEach(c => {
         const td = tr.insertCell();
-        td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}`;
+        td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}${c.wrap?'word-break:break-word;max-width:200px;':'white-space:nowrap;'}`;
         td.textContent = c.v;
       });
     });
@@ -3598,19 +3538,25 @@ async function sharePDF() {
   loader.style.display = 'flex';
   btn.disabled = true;
   const opt = {
-    margin: 5,
+    margin: 12,
     filename: `Orcamento_${d.cliente.replace(/\s+/g,'_')}_${d.seq}.pdf`,
-    image: {type:'jpeg', quality:.95},
+    image: {type:'png'},
     html2canvas: {scale:2, useCORS:true, logging:false},
     jsPDF: {unit:'mm', format:'a4', orientation:'portrait'}
   };
   try {
-    const blob = await html2pdf().set(opt).from(el).output('blob');
+    const pdfInstance = html2pdf().set(opt).from(el);
+    const blob = await pdfInstance.output('blob');
     const file = new File([blob], opt.filename, {type:'application/pdf'});
     if (navigator.canShare && navigator.canShare({files:[file]})) {
       await navigator.share({files:[file], title:'Orçamento Elétrico', text:`Orçamento para ${d.cliente}`});
     } else {
-      await html2pdf().set(opt).from(el).save();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = opt.filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
     showToast('✅ PDF gerado com sucesso!');
   } catch(err) {
@@ -3652,9 +3598,28 @@ function resetForm() {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  // Resetar garantia para padrão
+  const garEl = document.getElementById('inputGarantia');
+  if (garEl) garEl.value = '90';
+  // Resetar data para hoje e hora para 09:00
+  const dsEl = document.getElementById('dataServico');
+  if (dsEl) dsEl.valueAsDate = new Date();
+  const hsEl = document.getElementById('horaServico');
+  if (hsEl) hsEl.value = '09:00';
   const tipo = document.getElementById('tipoServico');
   if (tipo) { tipo.selectedIndex = 0; tipo.style.color = ''; }
   currentQuote = null;
+  _matClienteFornece = false;
+  srvPendente = null; matPendente = null;
+  const matTog = document.getElementById('mat-cliente-toggle');
+  if (matTog) matTog.classList.remove('on');
+  const spc = document.getElementById('srv-pending-card');
+  if (spc) spc.classList.remove('show');
+  const mpc = document.getElementById('mat-pending-card');
+  if (mpc) mpc.classList.remove('show');
+  if (document.getElementById("srv-config-panel")?.classList.contains("show")) fecharConfigurador();
+  document.getElementById("srv-inline-search").value = "";
+  document.getElementById("mat-inline-search").value = "";
   updateFloatingButton();
   showScreen('screen-input');
   window.scrollTo({top:0, behavior:'smooth'});
@@ -3772,6 +3737,7 @@ function fillSettingsForm() {
   set('configTelPrestador', appState.telefonePrestador);
   set('configInstagram', appState.instagram);
   set('configDocumento', appState.documento);
+  set('configCidade', appState.cidade || '');
   set('configSinal', appState.sinalPercent || 30);
   set('configDesconto', appState.desconto || 0);
   set('configValidade', appState.validadeDias || 15);
@@ -3787,6 +3753,7 @@ function saveSettings() {
   appState.telefonePrestador = get('configTelPrestador');
   appState.instagram = get('configInstagram');
   appState.documento = get('configDocumento');
+  appState.cidade = get('configCidade');
   appState.sinalPercent = parseInt(get('configSinal')) || 30;
   appState.desconto = parseFloat(get('configDesconto')) || 0;
   appState.validadeDias = parseInt(get('configValidade')) || 15;
@@ -3867,7 +3834,7 @@ function drawCrop() {
   const iw = _cropImg.width * scale * (W / _cropImg.width);
   const ih = _cropImg.height * scale * (W / _cropImg.width);
   ctx.drawImage(_cropImg, _cropX, _cropY, iw, ih);
-  
+
   const size = Math.min(W, H) * 0.78;
   const bx = (W - size) / 2, by = (H - size) / 2;
   const box = document.getElementById('cropBox');
@@ -3905,7 +3872,7 @@ function setupCropEvents() {
   zoom.value = _cropZoom;
   zoom.oninput = () => { _cropZoom = parseFloat(zoom.value); drawCrop(); updatePreview(); };
 
-  
+
   const onStart = (cx, cy) => { _cropDrag = true; _cropStartX = cx; _cropStartY = cy; _cropStartOX = _cropX; _cropStartOY = _cropY; };
   const onMove  = (cx, cy) => { if (!_cropDrag) return; _cropX = _cropStartOX + (cx - _cropStartX); _cropY = _cropStartOY + (cy - _cropStartY); drawCrop(); updatePreview(); };
   const onEnd   = () => { _cropDrag = false; };
@@ -3945,26 +3912,19 @@ function applyLogoUI() {
     if (logoImg) { logoImg.src = appState.logoBase64; logoImg.style.borderRadius = (appState.logoMoldura === 'round') ? '50%' : '6px'; }
     if (logoArea) logoArea.classList.add('show');
     if (printLogo) { printLogo.src = appState.logoBase64; printLogo.style.display = 'block'; }
-    if (printBg) {
-      printBg.style.backgroundImage = 'url(' + appState.logoBase64 + ')';
-      printBg.style.backgroundSize = 'contain';
-      printBg.style.backgroundPosition = 'center';
-      printBg.style.backgroundRepeat = 'no-repeat';
-      printBg.style.opacity = '0.12';
-      printBg.style.display = 'block';
-    }
+    if (printBg) printBg.style.display = 'block';
   } else {
     if (pa) pa.style.display = 'none';
     if (rb) rb.style.display = 'none';
     if (logoArea) logoArea.classList.remove('show');
     if (printLogo) printLogo.style.display = 'none';
-    if (printBg) printBg.style.display = 'none';
+    if (printBg) { printBg.style.display = 'none'; printBg.innerHTML = ''; }
   }
 }
 
 function removeLogo() {
   appState.logoBase64 = null; appState.logoMoldura = null;
-  saveState(); applyLogoUI();
+  saveState(); applyLogoUI(); initLogoBgs();
   showToast('Logo removida');
 }
 
@@ -4364,7 +4324,8 @@ function agListarVisitas() {
   lista.innerHTML = '';
   if (!visitas.length) { lista.innerHTML = '<div class="ag-empty">Nenhuma visita agendada.</div>'; return; }
   const hoje = new Date().toISOString().split('T')[0];
-  visitas.forEach((v, i) => {
+  visitas.forEach((v) => {
+    const vid = v.id;
     const atrasado = v.data < hoje && v.status === 'pendente';
     const isHoje   = v.data === hoje;
     const cls = atrasado ? 'ag-card ag-card-late' : isHoje ? 'ag-card ag-card-today' : 'ag-card';
@@ -4381,23 +4342,26 @@ function agListarVisitas() {
           ${atrasado ? `<div style="font-size:10px;font-weight:800;color:#f87171;margin-top:2px">⚠️ Atrasado</div>` : ''}
         </div>
         <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
-          <button class="ag-check-btn ${v.status==='concluido'?'done':''}" onclick="agAlternarStatus(${i})">${v.status==='concluido'?'✅':'✓'}</button>
-          <button class="ag-del-btn" onclick="agRemoverVisita(${i})">×</button>
+          <button class="ag-check-btn ${v.status==='concluido'?'done':''}" onclick="agAlternarStatusById(${vid})">${v.status==='concluido'?'✅':'✓'}</button>
+          <button class="ag-del-btn" onclick="agRemoverVisitaById(${vid})">×</button>
         </div>
       </div>`;
     lista.appendChild(div);
   });
 }
 
-function agAlternarStatus(i) {
+function agAlternarStatusById(vid) {
   if (!appState.visitas) return;
-  appState.visitas[i].status = appState.visitas[i].status === 'concluido' ? 'pendente' : 'concluido';
+  const idx = appState.visitas.findIndex(v => v.id === vid);
+  if (idx < 0) return;
+  appState.visitas[idx].status = appState.visitas[idx].status === 'concluido' ? 'pendente' : 'concluido';
   saveState(); agListarVisitas();
 }
 
-function agRemoverVisita(i) {
+function agRemoverVisitaById(vid) {
   if (!appState.visitas) return;
-  appState.visitas.splice(i, 1); saveState(); agListarVisitas();
+  appState.visitas = appState.visitas.filter(v => v.id !== vid);
+  saveState(); agListarVisitas();
 }
 
 function agRegistrarCliente() {
@@ -4585,7 +4549,6 @@ function toggleMatCliente() {
   if (tog) tog.classList.toggle('on', _matClienteFornece);
 }
 
-// ── Fundos de logo ──
 function getLogoSrc() {
   return appState.logoBase64 || _defaultBoltSvg();
 }
@@ -4621,8 +4584,6 @@ function initLogoBgs() {
   renderLogoBg('res-logo-bg', 'center');
 }
 
-const _origShowScreen = typeof showScreen === 'function' ? showScreen : null;
-
 let _miniConfirmResolve = null;
 function miniConfirm(name) {
   return new Promise(resolve => {
@@ -4638,6 +4599,11 @@ function miniConfirmResolve(ok) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Load fonts async — UI benefits, PDF uses system fallback (no broken font in canvas)
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap';
+  document.head.appendChild(link);
   loadState();
   applyUIFromState();
   checkWarrantyAlerts();
@@ -4690,23 +4656,20 @@ function _sendWarrantyNotification(total, expired, near) {
   <div style="background:var(--surface);border-radius:22px;padding:20px;width:min(340px,94vw);display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.5);border:1px solid var(--border)">
     <div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--txt);text-align:center">✂️ Ajustar Logo</div>
 
-    
     <div style="position:relative;background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--border);touch-action:none" id="cropArea">
       <canvas id="cropCanvas" style="width:100%;display:block;max-height:240px"></canvas>
-      
+
       <div id="cropOverlay" style="position:absolute;inset:0;pointer-events:none">
         <div id="cropBox" style="position:absolute;border:2.5px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,.5);transition:border-radius .25s"></div>
       </div>
     </div>
 
-    
     <div style="display:flex;align-items:center;gap:10px">
       <span style="font-size:14px">🔍</span>
       <input type="range" id="cropZoom" min="1" max="3" step="0.01" value="1" style="flex:1;accent-color:var(--accent)">
       <span style="font-size:14px">🔎</span>
     </div>
 
-    
     <div>
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:8px">Moldura</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -4719,13 +4682,11 @@ function _sendWarrantyNotification(total, expired, near) {
       </div>
     </div>
 
-    
     <div style="text-align:center">
       <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--txt3);margin-bottom:8px">Preview</div>
       <canvas id="cropPreview" style="width:72px;height:72px;border:2px solid var(--border)"></canvas>
     </div>
 
-    
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <button onclick="closeCropModal()" style="padding:12px;font-family:var(--font-display);font-size:12px;font-weight:700;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--txt2);cursor:pointer">Cancelar</button>
       <button onclick="confirmCrop()" style="padding:12px;font-family:var(--font-display);font-size:12px;font-weight:700;background:var(--accent-g);border:none;border-radius:10px;color:#fff;cursor:pointer">✓ Confirmar</button>
