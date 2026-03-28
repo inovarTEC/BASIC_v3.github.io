@@ -58,11 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
   } catch(e) {}
 });
 </script>
-  <!-- Fonts loaded via JS after DOM ready for PDF compatibility -->
-  <style id="font-face-pdf">
-    @font-face { font-family: 'Syne'; font-weight: 400 600 700 800; src: local('Syne'); }
-    @font-face { font-family: 'Inter'; font-weight: 400 500 600 700 800; src: local('Inter'), local('Arial'); }
-  </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -1190,6 +1187,10 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
       <span style="font-size:12px;color:#4ade80">🏷️ Desconto</span>
       <span id="displayDesconto" style="font-size:12px;font-weight:700;color:#4ade80"></span>
     </div>
+    <div id="displayAcrescRow" style="display:none;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <span style="font-size:12px;color:var(--txt2)">➕ Acréscimo</span>
+      <span id="displayAcrescimo" style="font-size:12px;font-weight:700;color:var(--txt)"></span>
+    </div>
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;cursor:pointer" onclick="toggleMatCliente()">
       <span style="font-size:12px;color:var(--txt2)">📦 Cliente fornece material?</span>
       <div id="mat-cliente-toggle" class="toggle-switch"><div class="toggle-thumb"></div></div>
@@ -1202,7 +1203,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
       <span id="labelPDF">↗ PDF</span>
       <div id="loaderPDF" class="loader" style="display:none"></div>
     </button>
-    <button onclick="showScreen('screen-input')" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:#2563eb;border:none;border-radius:12px;color:#fff;cursor:pointer;letter-spacing:.04em">✏️ Editar</button>
+    <button onclick="voltarEditar()" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:#2563eb;border:none;border-radius:12px;color:#fff;cursor:pointer;letter-spacing:.04em">✏️ Editar</button>
     <button onclick="resetForm()" style="padding:13px 6px;font-family:var(--font-display);font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--txt2);cursor:pointer;letter-spacing:.04em">↺ Novo</button>
   </div>
 
@@ -1452,7 +1453,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <div class="input-wrap"><span class="prefix" style="font-size:13px;font-weight:700">@</span><input type="text" id="configInstagram" class="input-field" placeholder="seueletricista" oninput="markSettingsDirty()"></div>
         </div>
         <div class="settings-field"><label class="settings-field-label">CPF / CNPJ</label><input type="text" id="configDocumento" class="input-field" placeholder="000.000.000-00" oninput="markSettingsDirty()"></div>
-        <div class="settings-field"><label class="settings-field-label">Cidade / Estado</label><input type="text" id="configCidade" class="input-field" placeholder="Ex: Recife - PE" oninput="markSettingsDirty()"></div>
       </div>
     </div>
 
@@ -1610,7 +1610,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
             </div>
             <div style="font-size:11px;color:#475569;margin-top:3px">
               <span id="printDocSpan" style="display:none"><span id="printDocVal"></span> · </span>Orçamento Profissional · <span id="printNumOrc" style="color:#3b82f6">Nº 0001</span>
-              <span id="printCidadeSpan" style="display:none"> · <span id="printCidadeVal" style="color:#64748b"></span></span>
             </div>
           </div>
         </div>
@@ -1688,14 +1687,14 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
           <div id="printLogRow" style="display:none;justify-content:space-between;font-size:12px;color:#64748b;padding:6px 0;border-bottom:1px solid #f1f5f9">
             <span>Deslocamento:</span><span style="font-weight:700;color:#0f172a" id="printLogistica">R$ 0,00</span>
           </div>
-          <div id="printHorasRow" style="display:none;justify-content:space-between;font-size:12px;color:#64748b;padding:6px 0;border-bottom:1px solid #f1f5f9">
-            <span>Horas (<span id="printHorasQtd">0</span>h):</span><span style="font-weight:700;color:#0f172a" id="printHorasVal">R$ 0,00</span>
-          </div>
           <div id="printDiscRow" style="display:none;justify-content:space-between;font-size:12px;color:#16a34a;padding:6px 0;border-bottom:1px solid #f1f5f9">
             <span>Desconto (<span id="printDiscPct">0</span>%):</span><span style="font-weight:700;" id="printDiscVal">-R$ 0,00</span>
           </div>
-          <div id="printAcrescimoRow" style="display:none;justify-content:space-between;font-size:12px;color:#f97316;padding:6px 0;border-bottom:1px solid #f1f5f9">
-            <span>Acréscimo:</span><span style="font-weight:700;color:#0f172a" id="printAcrescimoVal">R$ 0,00</span>
+          <div id="printAcrescRow" style="display:none;justify-content:space-between;font-size:12px;color:#64748b;padding:6px 0;border-bottom:1px solid #f1f5f9">
+            <span>Acréscimo:</span><span style="font-weight:700;color:#0f172a" id="printAcrescVal">R$ 0,00</span>
+          </div>
+          <div id="printHorasRow" style="display:none;justify-content:space-between;font-size:12px;color:#64748b;padding:6px 0;border-bottom:1px solid #f1f5f9">
+            <span>Mão de obra (horas):</span><span style="font-weight:700;color:#0f172a" id="printHorasVal">R$ 0,00</span>
           </div>
           <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:8px">
             <div>
@@ -3285,6 +3284,15 @@ function displayResults(totais, totalServicos, mat) {
     if (totais.descontoPerc > 0) { discRow.style.display = 'flex'; el('displayDesconto').textContent = '-' + formatBRL(totais.valorDesconto) + ' (' + totais.descontoPerc + '%)'; }
     else discRow.style.display = 'none';
   }
+  // Mostrar acréscimo na tela de resultados se houver
+  const acrescRowDisp = document.getElementById('displayAcrescRow');
+  if (acrescRowDisp) {
+    acrescRowDisp.style.display = totais.acrescimo > 0 ? 'flex' : 'none';
+    if (totais.acrescimo > 0) {
+      const acrescEl = document.getElementById('displayAcrescimo');
+      if (acrescEl) acrescEl.textContent = '+' + formatBRL(totais.acrescimo);
+    }
+  }
   showScreen('screen-results');
   updateFloatingButton();
   window.scrollTo({top: 0, behavior: 'smooth'});
@@ -3311,12 +3319,14 @@ function calculateQuote() {
     id: Date.now(),
     seq: appState.orcamentoSeq++,
     tipo, prestador, cliente, endereco, telefone,
-    detalhes: [detGeral, detalhes, detMat].filter(Boolean).join('\n'),
+    detalhes: [detGeral, detalhes, detMat].filter(Boolean).join(' · '),
     data: dataFmt, dataRaw, hora,
     itens, itensMat,
     total: totais.totalFinal,
     totalServicos,
-    mat, custoLog: totais.custoLog, horas: totais.horas, custoHoras: totais.custoHoras,
+    mat, custoLog: totais.custoLog,
+    horas: parseFloat(document.getElementById('tempoHoras')?.value) || 0,
+    custoHoras: totais.custoHoras,
     descontoPerc: totais.descontoPerc,
     valorDesconto: totais.valorDesconto,
     acrescimo: totais.acrescimo,
@@ -3339,7 +3349,7 @@ function generateMessages(d) {
   const endTxt = d.endereco ? `\n📍 *Local:* ${d.endereco}` : '';
   const obsTxt = d.detalhes ? `\n*OBS:* ${d.detalhes}` : '';
   document.getElementById('txt_proposta').textContent =
-    `*ORÇAMENTO TÉCNICO — ELETRICISTA POWER*\n\nOlá ${d.cliente}! Segue o orçamento:\n\n*SERVIÇOS:*\n${lista}${obsTxt}${endTxt}\n\n*INVESTIMENTO TOTAL:* ${formatBRL(d.total)}\n(Material + Mão de Obra incluso)\n\n*Garantia:* ${d.garantiaStr}\n*Data Prevista:* ${d.data} às ${d.hora}h\n\nFico no aguardo.\n${d.prestador}`;
+    `*ORÇAMENTO TÉCNICO — ELETRICISTA POWER*\n\nOlá ${d.cliente}! Segue o orçamento:\n\n*SERVIÇOS:*\n${lista}${obsTxt}${endTxt}\n\n*INVESTIMENTO TOTAL:* ${formatBRL(d.total)}\n(Material + Mão de Obra incluso)\n\n*Garantia:* ${d.garantiaStr}\n*Data Prevista:* ${d.data}${d.hora ? ' às ' + d.hora + 'h' : ''}\n\nFico no aguardo.\n${d.prestador}`;
   document.getElementById('txt_sinal').textContent =
     `Olá ${d.cliente}! 👋\n\nPara agendarmos dia *${d.data}* e comprarmos o material, precisamos de um sinal.\n\n*Sinal (${d.sinalPercent}%): ${formatBRL(d.sinal)}*\n\nChave PIX: ${appState.chavePix || '[SUA CHAVE PIX]'}\n\nPor favor, envie o comprovante. Obrigado! ✅`;
   document.getElementById('txt_final').textContent =
@@ -3356,29 +3366,26 @@ async function sharePDF() {
   set('printPrestador', d.prestador);
   set('printCliente', d.cliente);
   set('printTelefone', d.telefone ? '📱 ' + d.telefone : '');
-  // Build client address including bairro if available from client record
-  const clientRecord = appState.clientes.find(c => c.nome === d.cliente);
-  const enderecoComBairro = [d.endereco, clientRecord?.bairro].filter(Boolean).join(' — ');
-  set('printEndereco', enderecoComBairro ? '📍 ' + enderecoComBairro : '');
-  const detalhesTxt = ([d.tipo, d.detalhes].filter(Boolean).join(' — ')).replace(/\|/g, '\n');
-  set('printDetalhes', detalhesTxt);
-  document.getElementById('printDetalhes').style.whiteSpace = 'pre-wrap';
+  set('printEndereco', d.endereco ? '📍 ' + d.endereco : '');
+  set('printDetalhes', [d.tipo, d.detalhes].filter(Boolean).join(' — '));
   set('printData', d.data);
-  const printHoraSpanEl = document.getElementById('printHoraSpan');
-  if (printHoraSpanEl) {
-    if (d.hora) {
-      printHoraSpanEl.textContent = '🕐 ' + d.hora + 'h';
-      printHoraSpanEl.style.display = '';
-    } else {
-      printHoraSpanEl.textContent = '';
-      printHoraSpanEl.style.display = 'none';
-    }
-  }
-  set('printNumOrc', 'Nº ' + new Date().getFullYear() + '-' + String(d.seq).padStart(4,'0'));
+  set('printHoraSpan', d.hora ? '🕐 ' + d.hora + 'h' : '');
+  const anoAtual = new Date().getFullYear();
+  set('printNumOrc', anoAtual + '-' + String(d.seq).padStart(4,'0'));
   set('printGarantia', d.garantiaStr);
   set('printMaoObra', formatBRL(d.totalServicos || 0));
   set('printMateriais', formatBRL(d.mat));
   set('printLogistica', formatBRL(d.custoLog || 0));
+
+  const semMat = _matClienteFornece;
+  const totalPDF = semMat ? (d.total - (d.mat || 0)) : d.total;
+  set('printTotal', formatBRL(totalPDF));
+  // Nota no PDF se cliente fornece material
+  const notaMatEl = document.getElementById('printNotaMat');
+  if (notaMatEl) {
+    notaMatEl.style.display = semMat ? 'block' : 'none';
+    notaMatEl.textContent = semMat ? '⚠️ Materiais por conta do cliente — valor acima refere-se somente à mão de obra.' : '';
+  }
 
   const tel = appState.telefonePrestador;
   const ig = appState.instagram;
@@ -3387,17 +3394,6 @@ async function sharePDF() {
   const validade = appState.validadeDias || 15;
   const cartoes = appState.cartoes;
   const sinalPct = appState.sinalPercent || 30;
-  const semMat = _matClienteFornece;
-  const totalPDF = semMat ? (d.total - (d.mat || 0)) : d.total;
-  const sinal = totalPDF * (sinalPct / 100);
-
-  set('printTotal', formatBRL(totalPDF));
-
-  const notaMatEl = document.getElementById('printNotaMat');
-  if (notaMatEl) {
-    notaMatEl.style.display = semMat ? 'block' : 'none';
-    notaMatEl.textContent = semMat ? '⚠️ Materiais por conta do cliente — valor acima refere-se somente à mão de obra.' : '';
-  }
 
   set('printTelPrestadorVal', tel);
   show('printTelPrestador', !!tel);
@@ -3418,9 +3414,6 @@ async function sharePDF() {
   show('printPixSpan', !!pix);
   set('printDocVal', doc);
   show('printDocSpan', !!doc);
-  const cidade = appState.cidade || '';
-  set('printCidadeVal', cidade);
-  show('printCidadeSpan', !!cidade);
   set('printValidade', validade + ' dias');
   set('printCartoes', cartoes ? '💳 ' + cartoes : '');
   show('printCartoes', !!cartoes);
@@ -3428,25 +3421,21 @@ async function sharePDF() {
   if (d.custoLog > 0) document.getElementById('printLogRow').style.display = 'flex';
   else document.getElementById('printLogRow').style.display = 'none';
 
-  const horasRow = document.getElementById('printHorasRow');
-  if (horasRow) {
-    if (d.custoHoras > 0) {
-      horasRow.style.display = 'flex';
-      set('printHorasQtd', (d.horas || 0));
-      set('printHorasVal', formatBRL(d.custoHoras));
-    } else {
-      horasRow.style.display = 'none';
-    }
+  // Acréscimo row
+  const acrescRow = document.getElementById('printAcrescRow');
+  const acrescVal = document.getElementById('printAcrescVal');
+  if (acrescRow && acrescVal) {
+    if (d.acrescimo > 0) { acrescRow.style.display = 'flex'; acrescVal.textContent = formatBRL(d.acrescimo); }
+    else acrescRow.style.display = 'none';
   }
 
-  const acrescimoRow = document.getElementById('printAcrescimoRow');
-  if (acrescimoRow) {
-    if (d.acrescimo > 0) {
-      acrescimoRow.style.display = 'flex';
-      set('printAcrescimoVal', formatBRL(d.acrescimo));
-    } else {
-      acrescimoRow.style.display = 'none';
-    }
+  // Horas row
+  const horasRow = document.getElementById('printHorasRow');
+  const horasVal = document.getElementById('printHorasVal');
+  const custoHoras = (d.horas || 0) * (appState.custoHora || 0);
+  if (horasRow && horasVal) {
+    if (custoHoras > 0) { horasRow.style.display = 'flex'; horasVal.textContent = formatBRL(custoHoras); }
+    else horasRow.style.display = 'none';
   }
 
   // Mostrar/ocultar materiais conforme toggle
@@ -3465,6 +3454,8 @@ async function sharePDF() {
     }
   }
 
+  // Sinal calculado sobre totalPDF (correto)
+  const sinal = totalPDF * (sinalPct / 100);
   const slEl = document.getElementById('printSinalLine');
   if (slEl && sinalPct > 0) {
     slEl.style.display = 'block';
@@ -3477,10 +3468,16 @@ async function sharePDF() {
   if (appState.logoBase64) {
     printLogo.src = appState.logoBase64;
     printLogo.style.display = 'block';
+    // Grade de logos pequenas no fundo do PDF
     if (printBg) {
       printBg.innerHTML = '';
-      printBg.style.cssText = 'position:absolute;inset:0;background-image:url(' + CSS.escape(appState.logoBase64).replace(/^url\(['"]?|['"]?\)$/g,'') + ');background-size:40px 40px;background-repeat:repeat;opacity:0.05;pointer-events:none;display:block;';
-      printBg.style.backgroundImage = 'url(' + appState.logoBase64 + ')';
+      printBg.style.cssText = 'position:absolute;inset:0;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:10px;align-items:center;justify-items:center;pointer-events:none;';
+      for (let i = 0; i < 40; i++) {
+        const img = document.createElement('img');
+        img.src = appState.logoBase64;
+        img.style.cssText = 'width:32px;height:32px;opacity:0.05;border-radius:6px;object-fit:contain;';
+        printBg.appendChild(img);
+      }
     }
   } else {
     printLogo.style.display = 'none';
@@ -3491,16 +3488,16 @@ async function sharePDF() {
   tbody.innerHTML = '';
   d.itens.forEach((i, idx) => {
     const tr = tbody.insertRow();
-    tr.style.cssText = 'border-bottom:1px solid #e2e8f0;background:' + (idx%2===0?'#fff':'#f8fafc');
+    tr.style.cssText = 'border-bottom:1px solid #f1f5f9;background:' + (idx%2===0?'#fff':'#f8fafc');
     const cells = [
-      {v: i.nome, a: 'left', pad: '9px 12px', fw: '600', wrap: true},
+      {v: i.nome, a: 'left', pad: '9px 12px', fw: '600'},
       {v: i.qtd, a: 'center', pad: '9px 8px'},
       {v: formatBRL(i.unitario), a: 'right', pad: '9px 8px', c: '#64748b'},
       {v: formatBRL(i.total), a: 'right', pad: '9px 12px', fw: '700', c: '#0f172a'},
     ];
     cells.forEach(c => {
       const td = tr.insertCell();
-      td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}${c.wrap?'word-break:break-word;max-width:200px;':'white-space:nowrap;'}`;
+      td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}`;
       td.textContent = c.v;
     });
   });
@@ -3512,16 +3509,16 @@ async function sharePDF() {
     matSection.style.display = 'block';
     d.itensMat.forEach((m, idx) => {
       const tr = matList.insertRow();
-      tr.style.cssText = 'border-bottom:1px solid #e2e8f0;background:' + (idx%2===0?'#fff':'#f8fafc');
+      tr.style.cssText = 'border-bottom:1px solid #f1f5f9;background:' + (idx%2===0?'#fff':'#f8fafc');
       const cells = [
-        {v: m.nome, a: 'left', pad: '9px 12px', fw: '600', wrap: true},
+        {v: m.nome, a: 'left', pad: '9px 12px', fw: '600'},
         {v: m.qtd, a: 'center', pad: '9px 8px'},
         {v: formatBRL(m.unitario), a: 'right', pad: '9px 8px', c: '#64748b'},
         {v: formatBRL(m.total), a: 'right', pad: '9px 12px', fw: '700', c: '#0f172a'},
       ];
       cells.forEach(c => {
         const td = tr.insertCell();
-        td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}${c.wrap?'word-break:break-word;max-width:200px;':'white-space:nowrap;'}`;
+        td.style.cssText = `padding:${c.pad};text-align:${c.a};font-size:12px;${c.fw?'font-weight:'+c.fw+';':''}${c.c?'color:'+c.c+';':''}`;
         td.textContent = c.v;
       });
     });
@@ -3544,18 +3541,21 @@ async function sharePDF() {
     jsPDF: {unit:'mm', format:'a4', orientation:'portrait'}
   };
   try {
-    const pdfInstance = html2pdf().set(opt).from(el);
-    const blob = await pdfInstance.output('blob');
-    const file = new File([blob], opt.filename, {type:'application/pdf'});
-    if (navigator.canShare && navigator.canShare({files:[file]})) {
-      await navigator.share({files:[file], title:'Orçamento Elétrico', text:`Orçamento para ${d.cliente}`});
+    const worker = html2pdf().set(opt).from(el);
+    if (navigator.canShare) {
+      const blob = await worker.output('blob');
+      const file = new File([blob], opt.filename, {type:'application/pdf'});
+      if (navigator.canShare({files:[file]})) {
+        await navigator.share({files:[file], title:'Orçamento Elétrico', text:`Orçamento para ${d.cliente}`});
+      } else {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = opt.filename;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
     } else {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = opt.filename;
-      document.body.appendChild(a); a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      await html2pdf().set(opt).from(el).save();
     }
     showToast('✅ PDF gerado com sucesso!');
   } catch(err) {
@@ -3570,11 +3570,20 @@ async function sharePDF() {
 
 function copyText(id, btn) {
   const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.innerHTML;
-    btn.innerHTML = '✓ COPIADO!';
-    setTimeout(() => btn.innerHTML = orig, 2000);
-  });
+  const orig = btn.innerHTML;
+  const ok = () => { btn.innerHTML = '✓ COPIADO!'; setTimeout(() => btn.innerHTML = orig, 2000); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(ok).catch(() => fallbackCopy(text, ok));
+  } else {
+    fallbackCopy(text, ok);
+  }
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) { showToast('Erro ao copiar'); }
+  document.body.removeChild(ta);
 }
 
 function showScreen(id) {
@@ -3583,6 +3592,12 @@ function showScreen(id) {
   });
   document.getElementById(id)?.classList.add('active');
   window.scrollTo({top:0, behavior:'smooth'});
+  // Sync bottom nav
+  if (id === 'screen-input' || id === 'screen-results') {
+    document.getElementById('bnav-orcamento').className = 'bottom-nav-btn active';
+    document.getElementById('bnav-agenda').className = 'bottom-nav-btn';
+    document.getElementById('bnav-historico').className = 'bottom-nav-btn';
+  }
 }
 
 function resetForm() {
@@ -3620,7 +3635,7 @@ function resetForm() {
   document.getElementById("srv-inline-search").value = "";
   document.getElementById("mat-inline-search").value = "";
   updateFloatingButton();
-  showScreen('screen-input');
+  switchMainTab('orcamento');
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -3635,6 +3650,12 @@ function loadState() {
   if (!Array.isArray(appState.visitas)) appState.visitas = [];
   if (!appState.sinalPercent) appState.sinalPercent = 30;
   if (!appState.orcamentoSeq) appState.orcamentoSeq = 1;
+  // Garantir que seq reinicia com o ano
+  const anoAtual = new Date().getFullYear();
+  if (!appState.orcamentoSeqAno || appState.orcamentoSeqAno !== anoAtual) {
+    appState.orcamentoSeqAno = anoAtual;
+    appState.orcamentoSeq = 1;
+  }
   applyUIFromState();
 }
 
@@ -3736,7 +3757,6 @@ function fillSettingsForm() {
   set('configTelPrestador', appState.telefonePrestador);
   set('configInstagram', appState.instagram);
   set('configDocumento', appState.documento);
-  set('configCidade', appState.cidade || '');
   set('configSinal', appState.sinalPercent || 30);
   set('configDesconto', appState.desconto || 0);
   set('configValidade', appState.validadeDias || 15);
@@ -3752,7 +3772,6 @@ function saveSettings() {
   appState.telefonePrestador = get('configTelPrestador');
   appState.instagram = get('configInstagram');
   appState.documento = get('configDocumento');
-  appState.cidade = get('configCidade');
   appState.sinalPercent = parseInt(get('configSinal')) || 30;
   appState.desconto = parseFloat(get('configDesconto')) || 0;
   appState.validadeDias = parseInt(get('configValidade')) || 15;
@@ -4263,7 +4282,12 @@ function showCatAutosave(type) {
 
 function switchMainTab(tab) {
   const screens = { orcamento: 'screen-input', agenda: 'screen-agenda', historico: 'screen-historico' };
-  showScreen(screens[tab] || 'screen-input');
+  const screenId = screens[tab] || 'screen-input';
+  ['screen-input','screen-results','screen-agenda','screen-historico'].forEach(sid => {
+    document.getElementById(sid)?.classList.remove('active');
+  });
+  document.getElementById(screenId)?.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
   document.getElementById('bnav-orcamento').className = 'bottom-nav-btn' + (tab === 'orcamento' ? ' active' : '');
   document.getElementById('bnav-agenda').className    = 'bottom-nav-btn' + (tab === 'agenda'    ? ' active-agenda' : '');
   document.getElementById('bnav-historico').className = 'bottom-nav-btn' + (tab === 'historico' ? ' active-historico' : '');
@@ -4542,10 +4566,22 @@ function agCalcularRelatorio() {
 
 let _matClienteFornece = false;
 
+function voltarEditar() {
+  switchMainTab('orcamento');
+}
+
 function toggleMatCliente() {
   _matClienteFornece = !_matClienteFornece;
   const tog = document.getElementById('mat-cliente-toggle');
   if (tog) tog.classList.toggle('on', _matClienteFornece);
+  // Atualizar total exibido
+  if (currentQuote) {
+    const totalPDF = _matClienteFornece ? (currentQuote.total - (currentQuote.mat || 0)) : currentQuote.total;
+    const el = document.getElementById('displayPrecoFinal');
+    if (el) el.textContent = formatBRL(totalPDF);
+    const lucrEl = document.getElementById('displayLucroLiquido');
+    if (lucrEl) lucrEl.textContent = formatBRL(totalPDF - (currentQuote.mat || 0) - (currentQuote.custoLog || 0) - (currentQuote.custoHoras || 0));
+  }
 }
 
 function getLogoSrc() {
@@ -4598,11 +4634,6 @@ function miniConfirmResolve(ok) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Load fonts async — UI benefits, PDF uses system fallback (no broken font in canvas)
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap';
-  document.head.appendChild(link);
   loadState();
   applyUIFromState();
   checkWarrantyAlerts();
