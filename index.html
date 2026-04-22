@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <!-- Firebase SDK modular — sem variável global, sem erro de carregamento -->
 <script type="module">
-import { initializeApp }                                from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp }                                    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut,
          onAuthStateChanged, browserLocalPersistence,
-         setPersistence }                               from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         setPersistence }                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const app  = initializeApp({
   apiKey           : "AIzaSyBsws-hQkcJQOLKJvYhz2yZ43AZiu9Rsus",
@@ -20,7 +20,35 @@ const app  = initializeApp({
 const auth = getAuth(app);
 setPersistence(auth, browserLocalPersistence);
 
-// Expõe funções no escopo global para os onclicks do HTML (Regra 9)
+window.fbMostrarRecuperacao = function() {
+  document.getElementById('fb-form-login').style.display     = 'none';
+  document.getElementById('fb-form-recupera').style.display  = 'flex';
+  const emailLogin = document.getElementById('fbEmail').value.trim();
+  if (emailLogin) document.getElementById('fbEmailRecupera').value = emailLogin;
+  document.getElementById('fbRecuperaMsg').textContent = '';
+};
+
+window.fbVoltarLogin = function() {
+  document.getElementById('fb-form-recupera').style.display = 'none';
+  document.getElementById('fb-form-login').style.display    = 'flex';
+  document.getElementById('fbRecuperaMsg').textContent      = '';
+};
+
+window.fbEnviarRecuperacao = async function() {
+  const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+  const email = document.getElementById('fbEmailRecupera').value.trim();
+  const msg   = document.getElementById('fbRecuperaMsg');
+  if (!email) { msg.style.color = '#f87171'; msg.textContent = '⚠️ Informe seu e-mail.'; return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    msg.style.color = '#4ade80';
+    msg.textContent = '✅ Link enviado! Verifique sua caixa de entrada.';
+  } catch(e) {
+    msg.style.color = '#f87171';
+    msg.textContent = e.code === 'auth/user-not-found' ? '❌ E-mail não cadastrado.' : '❌ Erro ao enviar. Tente novamente.';
+  }
+};
+
 window.fbLogin = async function() {
   const email = document.getElementById('fbEmail').value.trim();
   const pass  = document.getElementById('fbPass').value;
@@ -48,7 +76,6 @@ window.fbLogin = async function() {
 
 window.fbLogout = function() { signOut(auth); };
 
-// Observa estado — única fonte de verdade (Regra 8)
 onAuthStateChanged(auth, user => {
   const loginScreen = document.getElementById('fb-login-screen');
   const appShell    = document.querySelector('.app-shell');
@@ -849,13 +876,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .settings-tab-content { display: none; padding: 16px 18px; }
 .settings-tab-content.active { display: block; }
 .settings-footer { flex-shrink: 0; padding: 10px 18px calc(env(safe-area-inset-bottom) + 6px); background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
-.toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.toggle-label { font-size: 14px; font-weight: 700; color: var(--txt); }
-.toggle-sub { font-size: 11px; color: var(--txt3); margin-top: 2px; }
-.toggle-switch { width: 46px; height: 26px; border-radius: 99px; background: var(--border); cursor: pointer; position: relative; transition: background .25s; flex-shrink: 0; }
-.toggle-switch.on { background: var(--accent); }
-.toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .25s; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
-.toggle-switch.on .toggle-thumb { transform: translateX(20px); }
 
 .acc-cat { border-bottom: 1px solid var(--border); }
 .acc-cat:last-child { border: none; }
@@ -1037,57 +1057,71 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .scp-cancel { width: 100%; padding: 7px; background: none; color: var(--txt3); border: none; border-radius: var(--radius-sm); font-size: 12px; cursor: pointer; margin-top: 4px; }
 </style>
 </head>
-
-
-</head>
 <body>
 
 <!-- TELA DE LOGIN FIREBASE -->
 <div id="fb-login-screen" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f172a;flex-direction:column;align-items:center;justify-content:center;padding:24px">
-  <div style="width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:0">
+  <div style="width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center">
 
-    <!-- Logo / ícone -->
     <div style="width:72px;height:72px;background:linear-gradient(135deg,#1e3a5f,#0f172a);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px;border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 32px rgba(0,0,0,.4)">⚡</div>
-
     <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f1f5f9;letter-spacing:.04em;margin-bottom:4px">ELETRICISTA <span style="color:#f97316">POWER</span></div>
     <div style="font-size:12px;color:#64748b;margin-bottom:32px">Acesso exclusivo para clientes</div>
 
-    <!-- Card de login -->
-    <div style="width:100%;background:#111827;border:1px solid #1e2d45;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px">
-
+    <!-- Formulário de login -->
+    <div id="fb-form-login" style="width:100%;background:#111827;border:1px solid #1e2d45;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px">
       <div style="display:flex;flex-direction:column;gap:5px">
         <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b">E-mail</label>
         <input id="fbEmail" type="email" placeholder="seu@email.com" autocomplete="email"
-          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none"
+          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
           onkeydown="if(event.key==='Enter')document.getElementById('fbPass').focus()">
       </div>
-
       <div style="display:flex;flex-direction:column;gap:5px">
         <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b">Senha</label>
         <input id="fbPass" type="password" placeholder="••••••••" autocomplete="current-password"
-          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none"
+          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
           onkeydown="if(event.key==='Enter')fbLogin()">
       </div>
-
       <div id="fbError" style="font-size:12px;color:#f87171;min-height:18px;text-align:center"></div>
-
       <button id="fbLoginBtn" onclick="fbLogin()"
         style="width:100%;padding:15px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;border:none;border-radius:12px;cursor:pointer;letter-spacing:.04em;box-shadow:0 6px 24px rgba(249,115,22,.35)">
         ⚡ ENTRAR
       </button>
+      <button onclick="fbMostrarRecuperacao()"
+        style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;padding:0;text-decoration:underline">
+        Esqueci minha senha
+      </button>
+    </div>
 
+    <!-- Formulário de recuperação de senha -->
+    <div id="fb-form-recupera" style="display:none;width:100%;background:#111827;border:1px solid #1e2d45;border-radius:20px;padding:24px;flex-direction:column;gap:14px">
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#f1f5f9;text-align:center">🔑 Recuperar senha</div>
+      <div style="font-size:12px;color:#64748b;text-align:center;line-height:1.5">Digite seu e-mail e enviaremos um link para criar uma nova senha.</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b">E-mail</label>
+        <input id="fbEmailRecupera" type="email" placeholder="seu@email.com" autocomplete="email"
+          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+          onkeydown="if(event.key==='Enter')fbEnviarRecuperacao()">
+      </div>
+      <div id="fbRecuperaMsg" style="font-size:12px;min-height:18px;text-align:center"></div>
+      <button onclick="fbEnviarRecuperacao()"
+        style="width:100%;padding:15px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;border:none;border-radius:12px;cursor:pointer;letter-spacing:.04em">
+        📧 ENVIAR LINK
+      </button>
+      <button onclick="fbVoltarLogin()"
+        style="background:none;border:none;color:#64748b;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;padding:0;text-decoration:underline">
+        ← Voltar ao login
+      </button>
     </div>
 
     <div style="margin-top:20px;text-align:center">
       <div style="font-size:11px;color:#475569;margin-bottom:6px">Não tem acesso ainda?</div>
-      <a href="https://eletricistapro.com.br/" target="_blank"
-        style="font-size:12px;font-weight:700;color:#f97316;text-decoration:none">
+      <a href="https://eletricistapro.com.br/" target="_blank" style="font-size:12px;font-weight:700;color:#f97316;text-decoration:none">
         Adquira em eletricistapro.com.br ↗
       </a>
     </div>
-
   </div>
 </div>
+
 <div class="app-shell" style="display:none">
 <div class="app-card">
 
@@ -1582,7 +1616,14 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     <div class="modal-handle"></div>
     <div class="modal-header">
       <div class="modal-title">⚙️ Ajustes</div>
-      <button class="modal-close" onclick="closeSettings()">✕</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onclick="toggleDarkMode()"
+          style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:99px;border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;font-size:12px;font-weight:700;color:var(--txt2);font-family:var(--font-display);transition:all .2s;white-space:nowrap">
+          <span id="headerDarkIcon">🌙</span>
+          <span id="headerDarkLabel">Escuro</span>
+        </button>
+        <button class="modal-close" onclick="closeSettings()">✕</button>
+      </div>
     </div>
 
     <div class="modal-scroll-body">
@@ -1637,16 +1678,6 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     </div>
 
     <div id="tab-negocio" class="settings-tab-content">
-      <div class="settings-section">
-        <div class="settings-section-title">🌙 Aparência</div>
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-label">Modo Escuro</div>
-            <div class="toggle-sub">Salvo automaticamente</div>
-          </div>
-          <div id="darkToggle" class="toggle-switch" onclick="toggleDarkMode()"><div class="toggle-thumb"></div></div>
-        </div>
-      </div>
       <div class="settings-section">
         <div class="settings-section-title">💰 Financeiro</div>
         <div class="grid-3" style="margin-bottom:10px">
@@ -1753,9 +1784,12 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
         </div>
       </div>
       <div class="settings-section" style="border:none">
-        <div class="settings-section-title">🎁 Parceiros</div>
-        <a href="https://beacons.ai/josetecinstalation/eletronicos" target="_blank" class="affiliate-btn">
-          🎁 OFERTAS DA SEMANA ↗
+        <div class="settings-section-title">🔗 Links Úteis</div>
+        <a href="https://collshp.com/jose_o_souza271?view=storefront" target="_blank" class="affiliate-btn">
+          🛒 FERRAMENTAS E MATERIAIS ↗
+        </a>
+        <a href="https://eletricistapro.com.br/" target="_blank" class="affiliate-btn" style="margin-top:10px;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 4px 18px rgba(37,99,235,.35)">
+          📱 VER OUTROS APPS ↗
         </a>
         <p style="font-size:11px;color:var(--txt3);text-align:center;margin-top:8px;line-height:1.5">Materiais e equipamentos com preços especiais para eletricistas</p>
       </div>
@@ -3929,15 +3963,15 @@ function applyUIFromState() {
   applyLogoUI();
   const npEl = document.getElementById('nomePrestador');
   if (npEl) npEl.value = appState.prestadorPadrao || '';
-  const dt = document.getElementById('darkToggle');
-  if (dt) dt.classList.toggle('on', !!appState.darkMode);
   applyTheme();
 }
 
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', appState.darkMode ? 'dark' : 'light');
-  const dt = document.getElementById('darkToggle');
-  if (dt) dt.classList.toggle('on', appState.darkMode);
+  const icon  = document.getElementById('headerDarkIcon');
+  const label = document.getElementById('headerDarkLabel');
+  if (icon)  icon.textContent  = appState.darkMode ? '☀️' : '🌙';
+  if (label) label.textContent = appState.darkMode ? 'Claro' : 'Escuro';
 }
 
 function toggleDarkMode() {
