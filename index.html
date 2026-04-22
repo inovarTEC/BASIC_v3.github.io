@@ -2,6 +2,70 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<!-- Firebase SDK modular — sem variável global, sem erro de carregamento -->
+<script type="module">
+import { initializeApp }                                from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut,
+         onAuthStateChanged, browserLocalPersistence,
+         setPersistence }                               from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const app  = initializeApp({
+  apiKey           : "AIzaSyBsws-hQkcJQOLKJvYhz2yZ43AZiu9Rsus",
+  authDomain       : "eletricista-power.firebaseapp.com",
+  projectId        : "eletricista-power",
+  storageBucket    : "eletricista-power.firebasestorage.app",
+  messagingSenderId: "111779689903",
+  appId            : "1:111779689903:web:3999844c7ccaa1ec71ab5a"
+});
+const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence);
+
+// Expõe funções no escopo global para os onclicks do HTML (Regra 9)
+window.fbLogin = async function() {
+  const email = document.getElementById('fbEmail').value.trim();
+  const pass  = document.getElementById('fbPass').value;
+  const btn   = document.getElementById('fbLoginBtn');
+  const err   = document.getElementById('fbError');
+  if (!email || !pass) { err.textContent = '⚠️ Preencha e-mail e senha.'; return; }
+  err.textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Entrando...';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found'    : '❌ Usuário não encontrado.',
+      'auth/wrong-password'    : '❌ Senha incorreta.',
+      'auth/invalid-email'     : '❌ E-mail inválido.',
+      'auth/too-many-requests' : '⚠️ Muitas tentativas. Tente mais tarde.',
+      'auth/invalid-credential': '❌ E-mail ou senha incorretos.',
+    };
+    err.textContent = msgs[e.code] || '❌ Erro ao entrar. Verifique seus dados.';
+    btn.disabled = false;
+    btn.textContent = '⚡ ENTRAR';
+  }
+};
+
+window.fbLogout = function() { signOut(auth); };
+
+// Observa estado — única fonte de verdade (Regra 8)
+onAuthStateChanged(auth, user => {
+  const loginScreen = document.getElementById('fb-login-screen');
+  const appShell    = document.querySelector('.app-shell');
+  const logoutBtn   = document.getElementById('fbLogoutBtn');
+  if (user) {
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (appShell)    appShell.style.display     = '';
+    if (logoutBtn)   logoutBtn.style.display    = 'flex';
+  } else {
+    if (loginScreen) loginScreen.style.display = 'flex';
+    if (appShell)    appShell.style.display     = 'none';
+    if (logoutBtn)   logoutBtn.style.display    = 'none';
+    const btn = document.getElementById('fbLoginBtn');
+    if (btn) { btn.disabled = false; btn.textContent = '⚡ ENTRAR'; }
+  }
+});
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -973,8 +1037,58 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
 .scp-cancel { width: 100%; padding: 7px; background: none; color: var(--txt3); border: none; border-radius: var(--radius-sm); font-size: 12px; cursor: pointer; margin-top: 4px; }
 </style>
 </head>
+
+
+</head>
 <body>
-<div class="app-shell">
+
+<!-- TELA DE LOGIN FIREBASE -->
+<div id="fb-login-screen" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f172a;flex-direction:column;align-items:center;justify-content:center;padding:24px">
+  <div style="width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:0">
+
+    <!-- Logo / ícone -->
+    <div style="width:72px;height:72px;background:linear-gradient(135deg,#1e3a5f,#0f172a);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px;border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 32px rgba(0,0,0,.4)">⚡</div>
+
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f1f5f9;letter-spacing:.04em;margin-bottom:4px">ELETRICISTA <span style="color:#f97316">POWER</span></div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:32px">Acesso exclusivo para clientes</div>
+
+    <!-- Card de login -->
+    <div style="width:100%;background:#111827;border:1px solid #1e2d45;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px">
+
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b">E-mail</label>
+        <input id="fbEmail" type="email" placeholder="seu@email.com" autocomplete="email"
+          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none"
+          onkeydown="if(event.key==='Enter')document.getElementById('fbPass').focus()">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#64748b">Senha</label>
+        <input id="fbPass" type="password" placeholder="••••••••" autocomplete="current-password"
+          style="width:100%;background:#0f172a;border:1.5px solid #1e2d45;border-radius:10px;padding:12px 14px;color:#f1f5f9;font-size:16px;font-family:'Inter',sans-serif;outline:none"
+          onkeydown="if(event.key==='Enter')fbLogin()">
+      </div>
+
+      <div id="fbError" style="font-size:12px;color:#f87171;min-height:18px;text-align:center"></div>
+
+      <button id="fbLoginBtn" onclick="fbLogin()"
+        style="width:100%;padding:15px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;border:none;border-radius:12px;cursor:pointer;letter-spacing:.04em;box-shadow:0 6px 24px rgba(249,115,22,.35)">
+        ⚡ ENTRAR
+      </button>
+
+    </div>
+
+    <div style="margin-top:20px;text-align:center">
+      <div style="font-size:11px;color:#475569;margin-bottom:6px">Não tem acesso ainda?</div>
+      <a href="https://eletricistapro.com.br/" target="_blank"
+        style="font-size:12px;font-weight:700;color:#f97316;text-decoration:none">
+        Adquira em eletricistapro.com.br ↗
+      </a>
+    </div>
+
+  </div>
+</div>
+<div class="app-shell" style="display:none">
 <div class="app-card">
 
 <header class="app-header">
@@ -986,6 +1100,7 @@ input, select, textarea { font-size: 16px !important; font-family: var(--font-bo
     </div>
   </div>
   <div class="header-actions">
+    <button id="fbLogoutBtn" onclick="fbLogout()" title="Sair" style="display:none;width:34px;height:34px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.06);border-radius:10px;align-items:center;justify-content:center;cursor:pointer;color:#e2e8f0;font-size:15px;transition:background .2s">🚪</button>
     <button class="header-btn" onclick="openSettings()" title="Configurações">⚙️</button>
   </div>
 </header>
